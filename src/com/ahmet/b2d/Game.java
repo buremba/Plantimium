@@ -3,47 +3,31 @@ package com.ahmet.b2d;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.ApplicationListener;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer10;
 import com.badlogic.gdx.math.EarClippingTriangulator;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.WorldManifold;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
-import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 
 public class Game extends GIcombin {
 	private com.badlogic.gdx.graphics.OrthographicCamera camera;
+
 	private Box2DDebugRenderer debugRenderer;
+
 	private SpriteBatch batch;
+
 	private World world;
-	private ArrayList<Body> boxes = new ArrayList<Body>();
 	Body groundBody,a,b;
 	private DistanceJoint mouseJoint = null;
 	Body hitBody = null;
@@ -55,6 +39,7 @@ public class Game extends GIcombin {
 		camera = new OrthographicCamera(48, 32);
 		camera.position.set(0, 16, 0);
 		debugRenderer = new Box2DDebugRenderer();
+		batch = new SpriteBatch();
 		createPhysicsWorld();
 	}
 
@@ -138,8 +123,8 @@ public class Game extends GIcombin {
 			b=boxBody;
 			DistanceJointDef def = new DistanceJointDef();
 			def.collideConnected = true;		
-			def.initialize(a, b, new Vector2(3,10), new Vector2(4,15));
-			def.length=0.5f;
+			def.initialize(a, b, new Vector2(3.4f,10.6f), new Vector2(4,15));
+			def.length=0.2f;
 			mouseJoint = (DistanceJoint)world.createJoint(def);
 			b.setAwake(true);
 			
