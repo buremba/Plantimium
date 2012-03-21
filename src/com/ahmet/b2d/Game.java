@@ -49,10 +49,12 @@ public class Game extends GIcombin implements InputProcessor {
 
 	private World world;
 	private ArrayList<Body> boxes = new ArrayList<Body>();
-	Body groundBody;
+	Body groundBody,a,b;
 	private DistanceJoint mouseJoint = null;
 	Body hitBody = null;
-
+	int i=0;
+	PolygonShape ps;
+	List<Vector2> vertices;
 	@Override
 	public void create () {
 		camera = new OrthographicCamera(48, 32);
@@ -83,17 +85,17 @@ public class Game extends GIcombin implements InputProcessor {
 		groundPoly.dispose();
 		
 		EarClippingTriangulator ect=new EarClippingTriangulator();
-		List<Vector2> vertices=new ArrayList<Vector2>();
+		vertices=new ArrayList<Vector2>();
 
 		vertices.add(new Vector2(-1, 5));
 		vertices.add(new Vector2(-1, 0));
 		vertices.add(new Vector2(1, 0));
 		vertices.add(new Vector2(1, 5));
-		vertices.add(new Vector2(4, 10));
+		vertices.add(new Vector2(4, 9));
 		vertices.add(new Vector2(3, 10));
 		vertices.add(new Vector2(0, 5));
 		vertices.add(new Vector2(-3, 10));
-		vertices.add(new Vector2(-4, 10));
+		vertices.add(new Vector2(-4, 9));
 		
 		vertices=ect.computeTriangles(vertices);
 		
@@ -105,22 +107,22 @@ public class Game extends GIcombin implements InputProcessor {
 
 		for(int i=0; i<vertices.size(); i+=3)
 		{
-			PolygonShape ps = new PolygonShape();
+			ps = new PolygonShape();
 			Vector2[] temp=new Vector2[] {
 				new Vector2(vertices.get(i+2).x,vertices.get(i+2).y),
 				new Vector2(vertices.get(i+1).x,vertices.get(i+1).y),
 				new Vector2(vertices.get(i).x,vertices.get(i).y)
 			};
-			System.out.println(i);
 			ps.set(temp);
 			boxBody.createFixture(ps, 1);
 		}
-		System.out.println(vertices.size()/3);
-
-
-			// add the box to our list of boxes
-			boxes.add(boxBody);
-		
+		a=boxBody;
+		DistanceJointDef def = new DistanceJointDef();
+		def.collideConnected = true;		
+		def.initialize(a, groundBody, new Vector2(0,5), new Vector2(0,0));
+		def.length=1;
+		mouseJoint = (DistanceJoint)world.createJoint(def);
+		groundBody.setAwake(true);
 		
 		/*BodyDef boxBodyDef2 = new BodyDef();
 		boxBodyDef2.type = BodyType.DynamicBody;
@@ -148,6 +150,34 @@ public class Game extends GIcombin implements InputProcessor {
 
 	@Override
 	public void render () {
+		i++;
+		if(i==100)
+		{
+			BodyDef boxBodyDef = new BodyDef();
+			boxBodyDef.type = BodyType.DynamicBody;
+			boxBodyDef.position.x = 4;
+			boxBodyDef.position.y = 15;
+			Body boxBody = world.createBody(boxBodyDef);
+			for(int i=0; i<vertices.size(); i+=3)
+			{
+				ps = new PolygonShape();
+				Vector2[] temp=new Vector2[] {
+					new Vector2(vertices.get(i+2).x/2,vertices.get(i+2).y/2),
+					new Vector2(vertices.get(i+1).x/2,vertices.get(i+1).y/2),
+					new Vector2(vertices.get(i).x/2,vertices.get(i).y/2)
+				};
+				ps.set(temp);
+				boxBody.createFixture(ps, 1);
+			}
+			b=boxBody;
+			DistanceJointDef def = new DistanceJointDef();
+			def.collideConnected = true;		
+			def.initialize(a, b, new Vector2(3,10), new Vector2(4,15));
+			def.length=0.5f;
+			mouseJoint = (DistanceJoint)world.createJoint(def);
+			b.setAwake(true);
+			
+		}
 		long start = System.nanoTime();
 		world.step(Gdx.graphics.getDeltaTime(), 8, 3);
 		float updateTime = (System.nanoTime() - start) / 1000000000.0f;
