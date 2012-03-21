@@ -119,8 +119,8 @@ public class Game extends GIcombin implements InputProcessor {
 		a=boxBody;
 		DistanceJointDef def = new DistanceJointDef();
 		def.collideConnected = true;		
-		def.initialize(a, groundBody, new Vector2(0,5), new Vector2(0,0));
-		def.length=1;
+		def.initialize(a, groundBody, new Vector2(0,5), new Vector2(0,1));
+		def.length=0.2f;
 		mouseJoint = (DistanceJoint)world.createJoint(def);
 		groundBody.setAwake(true);
 		
