@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="libs/gdx-backend-jogl-natives.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/ahmet/Desktop/droidDev/libgdx-0.9.2/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/gdx-backend-jogl.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/ahmet/Desktop/droidDev/libgdx-0.9.2/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/gdx-natives.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/ahmet/Desktop/droidDev/libgdx-0.9.2/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/gdx.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/ahmet/Desktop/droidDev/libgdx-0.9.2/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
