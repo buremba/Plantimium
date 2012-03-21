@@ -38,15 +38,10 @@ import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 
-public class Game extends GIcombin implements InputProcessor {
+public class Game extends GIcombin {
 	private com.badlogic.gdx.graphics.OrthographicCamera camera;
-	private ImmediateModeRenderer10 renderer;
 	private Box2DDebugRenderer debugRenderer;
-
 	private SpriteBatch batch;
-	private BitmapFont font;
-	private TextureRegion textureRegion;
-
 	private World world;
 	private ArrayList<Body> boxes = new ArrayList<Body>();
 	Body groundBody,a,b;
@@ -59,14 +54,8 @@ public class Game extends GIcombin implements InputProcessor {
 	public void create () {
 		camera = new OrthographicCamera(48, 32);
 		camera.position.set(0, 16, 0);
-		renderer = new ImmediateModeRenderer10();
 		debugRenderer = new Box2DDebugRenderer();
-		batch = new SpriteBatch();
-		font = new BitmapFont();
-		font.setColor(Color.RED);
-		textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/badlogicsmall.jpg")));
 		createPhysicsWorld();
-		Gdx.input.setInputProcessor(this);
 	}
 
 	private void createPhysicsWorld () {
@@ -123,29 +112,6 @@ public class Game extends GIcombin implements InputProcessor {
 		def.length=0.2f;
 		mouseJoint = (DistanceJoint)world.createJoint(def);
 		groundBody.setAwake(true);
-		
-		/*BodyDef boxBodyDef2 = new BodyDef();
-		boxBodyDef2.type = BodyType.DynamicBody;
-		boxBodyDef2.position.x = 0;
-		boxBodyDef2.position.y = 25;
-		Body boxBody2 = world.createBody(boxBodyDef2);
-		boxBody2.createFixture(boxPoly, 1);
-		// add the box to our list of boxes
-		boxes.add(boxBody2);
-	boxPoly.dispose();
-	*/
-
-		
-		world.setContactListener(new ContactListener() {
-			@Override
-			public void beginContact (Contact contact) {}
-			@Override
-			public void endContact (Contact contact) {}
-			@Override
-			public void preSolve (Contact contact, Manifold oldManifold) {}
-			@Override
-			public void postSolve (Contact contact, ContactImpulse impulse) {}
-		});
 	}
 
 	@Override
@@ -180,7 +146,6 @@ public class Game extends GIcombin implements InputProcessor {
 		}
 		long start = System.nanoTime();
 		world.step(Gdx.graphics.getDeltaTime(), 8, 3);
-		float updateTime = (System.nanoTime() - start) / 1000000000.0f;
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		camera.update();
@@ -189,26 +154,7 @@ public class Game extends GIcombin implements InputProcessor {
 
 		camera.apply(Gdx.gl10);
 		debugRenderer.render(world, camera.combined);
-		gl.glPointSize(4);
-		renderer.begin(GL10.GL_POINTS);
-		for (int i = 0; i < world.getContactCount(); i++) {
-			Contact contact = world.getContactList().get(i);
-			if (contact.isTouching()) {
-				WorldManifold manifold = contact.getWorldManifold();
-				int numContactPoints = manifold.getNumberOfContactPoints();
-				for (int j = 0; j < numContactPoints; j++) {
-					Vector2 point = manifold.getPoints()[j];
-					renderer.color(0, 1, 0, 1);
-					renderer.vertex(point.x, point.y, 0);
-				}
-			}
-		}
-		renderer.end();
-		gl.glPointSize(1);
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.begin();
-		font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond() + " update time: " + updateTime, 0, 20);
-		batch.end();
 	}
 	@Override
 	public void dispose () {
