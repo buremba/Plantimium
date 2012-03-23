@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -28,19 +29,17 @@ public class Game extends GIcombin {
 	private SpriteBatch batch;
 
 	private World world;
-	Body groundBody,a,b;
-	private DistanceJoint mouseJoint = null;
-	Body hitBody = null;
-	int i=0;
-	PolygonShape ps;
-	List<Vector2> vertices;
+	Body groundBody;
+	Mesh2d ak;
+	Body2d bk;
 	@Override
 	public void create () {
 		camera = new OrthographicCamera(48, 32);
-		camera.position.set(0, 16, 0);
+		camera.position.set(0, 5, 0);
 		debugRenderer = new Box2DDebugRenderer();
 		batch = new SpriteBatch();
 		createPhysicsWorld();
+		
 	}
 
 	private void createPhysicsWorld () {
@@ -57,86 +56,38 @@ public class Game extends GIcombin {
 		fixtureDef.filter.groupIndex = 0;
 		groundBody.createFixture(fixtureDef);
 		groundPoly.dispose();
-		
-		EarClippingTriangulator ect=new EarClippingTriangulator();
-		vertices=new ArrayList<Vector2>();
 
-		vertices.add(new Vector2(-1, 5));
-		vertices.add(new Vector2(-1, 0));
-		vertices.add(new Vector2(1, 0));
-		vertices.add(new Vector2(1, 5));
-		vertices.add(new Vector2(4, 9));
-		vertices.add(new Vector2(3, 10));
-		vertices.add(new Vector2(0, 5));
-		vertices.add(new Vector2(-3, 10));
-		vertices.add(new Vector2(-4, 9));
 		
-		vertices=ect.computeTriangles(vertices);
-		
-		BodyDef boxBodyDef = new BodyDef();
-		boxBodyDef.type = BodyType.DynamicBody;
-		boxBodyDef.position.x = 0;
-		boxBodyDef.position.y = 5;
-		Body boxBody = world.createBody(boxBodyDef);
+		Vector2[] vv={
+				new Vector2(-1, 5),
+				new Vector2(-1, 0),
+				new Vector2(1, 0),
+				new Vector2(1, 5),
+				new Vector2(4, 9),
+				new Vector2(3, 10),
+				new Vector2(0, 5),
+				new Vector2(-3, 10),
+				new Vector2(-4, 9)						
+		};
 
-		for(int i=0; i<vertices.size(); i+=3)
-		{
-			ps = new PolygonShape();
-			Vector2[] temp=new Vector2[] {
-				new Vector2(vertices.get(i+2).x,vertices.get(i+2).y),
-				new Vector2(vertices.get(i+1).x,vertices.get(i+1).y),
-				new Vector2(vertices.get(i).x,vertices.get(i).y)
-			};
-			ps.set(temp);
-			boxBody.createFixture(ps, 1);
-		}
-		a=boxBody;
-		DistanceJointDef def = new DistanceJointDef();
-		def.collideConnected = true;		
-		def.initialize(a, groundBody, new Vector2(0,5), new Vector2(0,1));
-		def.length=0.2f;
-		mouseJoint = (DistanceJoint)world.createJoint(def);
-		groundBody.setAwake(true);
+		vv=Tools.Triangulate(vv);
+		ak=new Mesh2d(vv,new Vector2(0,3),new Vector2(1,3),new Vector3(255,0,0),true);
+		bk=new Body2d(ak,world);
 	}
 
 	@Override
 	public void render () {
-		i++;
-		if(i==100)
-		{
-			BodyDef boxBodyDef = new BodyDef();
-			boxBodyDef.type = BodyType.DynamicBody;
-			boxBodyDef.position.x = 4;
-			boxBodyDef.position.y = 15;
-			Body boxBody = world.createBody(boxBodyDef);
-			for(int i=0; i<vertices.size(); i+=3)
-			{
-				ps = new PolygonShape();
-				Vector2[] temp=new Vector2[] {
-					new Vector2(vertices.get(i+2).x/2,vertices.get(i+2).y/2),
-					new Vector2(vertices.get(i+1).x/2,vertices.get(i+1).y/2),
-					new Vector2(vertices.get(i).x/2,vertices.get(i).y/2)
-				};
-				ps.set(temp);
-				boxBody.createFixture(ps, 1);
-			}
-			b=boxBody;
-			DistanceJointDef def = new DistanceJointDef();
-			def.collideConnected = true;		
-			def.initialize(a, b, new Vector2(3.4f,10.6f), new Vector2(4,15));
-			def.length=0.2f;
-			mouseJoint = (DistanceJoint)world.createJoint(def);
-			b.setAwake(true);
-			
-		}
-		long start = System.nanoTime();
 		world.step(Gdx.graphics.getDeltaTime(), 8, 3);
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			
 		camera.update();
 		camera.apply(gl);
+		
 		batch.getProjectionMatrix().set(camera.combined);
-
+		ak.angle=(float) Math.toDegrees(bk.body.getAngle());
+		ak.position=bk.body.getPosition();
+		ak.Draw(null);
 		camera.apply(Gdx.gl10);
 		debugRenderer.render(world, camera.combined);
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
