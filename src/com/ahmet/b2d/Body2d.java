@@ -1,14 +1,14 @@
 package com.ahmet.b2d;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Body2d {
+public class Body2d extends Drawable {
 
 	private Mesh2d mesh;
 	private World world;
@@ -20,11 +20,11 @@ public class Body2d {
 		BodyDef boxBodyDef = new BodyDef();
 		boxBodyDef.type = BodyType.DynamicBody;
 		boxBodyDef.position.x = mesh.position.x;
-		boxBodyDef.position.y = mesh.position.y;
-		Body boxBody = world.createBody(boxBodyDef);
+		boxBodyDef.position.y =mesh.position.y;
+		body = world.createBody(boxBodyDef);
 		
 		PolygonShape ps;
-		Vector2[] vv=Tools.Triangulate(mesh.getVertices());
+		Vector2[] vv=mesh.getVertices();
 		for(int i=0; i<vv.length; i+=3)
 		{
 			ps = new PolygonShape();
@@ -34,8 +34,13 @@ public class Body2d {
 				new Vector2(vv[i].x,vv[i].y)
 			};
 			ps.set(temp);
-			boxBody.createFixture(ps, 1);
+			body.createFixture(ps, 1);
 		}
-		this.body=boxBody;
+	}
+	@Override
+	public void Draw(SpriteBatch s) {
+		mesh.angle=(float) Math.toDegrees(body.getAngle());
+		mesh.position=body.getPosition();
+		mesh.Draw(s);
 	}
 }

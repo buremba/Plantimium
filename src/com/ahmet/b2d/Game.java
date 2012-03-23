@@ -43,11 +43,9 @@ public class Game extends GIcombin {
 	}
 
 	private void createPhysicsWorld () {
-
 		world = new World(new Vector2(0, -10), true);
 		PolygonShape groundPoly = new PolygonShape();
-		groundPoly.setAsBox(50, 1);
-		
+		groundPoly.setAsBox(50, 1);	
 		BodyDef groundBodyDef = new BodyDef();
 		groundBodyDef.type = BodyType.StaticBody;
 		groundBody = world.createBody(groundBodyDef);
@@ -85,11 +83,10 @@ public class Game extends GIcombin {
 		camera.apply(gl);
 		
 		batch.getProjectionMatrix().set(camera.combined);
-		ak.angle=(float) Math.toDegrees(bk.body.getAngle());
-		ak.position=bk.body.getPosition();
-		ak.Draw(null);
+
+		bk.Draw(null);
 		camera.apply(Gdx.gl10);
-		debugRenderer.render(world, camera.combined);
+		//debugRenderer.render(world, camera.combined);
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 	@Override
