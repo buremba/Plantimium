@@ -16,11 +16,7 @@ public class RenderStack {
 	}
 	public void Draw()
 	{
-		if(Gdx.graphics.getDeltaTime()>1/30)
-		{
-	        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	        Gdx.graphics.getGL10().glEnable(GL10.GL_TEXTURE_2D);
-			s.begin();
+			//s.begin();
 			for(int i=0; i<stack.size(); i++)
 			{
 				if(stack.get(i).sprite)
@@ -28,7 +24,7 @@ public class RenderStack {
 					stack.get(i).Draw(s);
 				}
 			}
-			s.end();
+			//s.end();
 			for(int i=0; i<stack.size(); i++)
 			{
 				if(!stack.get(i).sprite)
@@ -36,6 +32,5 @@ public class RenderStack {
 					stack.get(i).Draw(s);
 				}
 			}
-		}
 	}
 }

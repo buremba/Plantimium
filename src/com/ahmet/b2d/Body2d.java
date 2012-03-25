@@ -40,7 +40,8 @@ public class Body2d extends Drawable {
 	@Override
 	public void Draw(SpriteBatch s) {
 		mesh.angle=(float) Math.toDegrees(body.getAngle());
-		mesh.position=body.getPosition();
+		mesh.position.x=body.getPosition().x;
+		mesh.position.y=body.getPosition().y;
 		mesh.Draw(s);
 	}
 }

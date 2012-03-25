@@ -1,5 +1,6 @@
 package com.ahmet.b2d;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
@@ -52,6 +53,7 @@ public class Rect extends Drawable {
 		}
 		else
 		{
+			Gdx.gl10.glPushMatrix();
 			if(fill)
 			{
 				mesh.render(GL10.GL_TRIANGLES, 0, 4);
@@ -60,6 +62,7 @@ public class Rect extends Drawable {
 			{
 				mesh.render(GL10.GL_LINE_LOOP, 0, 4);
 			}
+			Gdx.gl10.glPopMatrix();
 		}
 		
 	}

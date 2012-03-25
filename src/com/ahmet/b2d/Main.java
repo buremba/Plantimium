@@ -1,5 +1,6 @@
 package com.ahmet.b2d;
 
+import com.ahmet.polyshaping.Game2;
 import com.badlogic.gdx.backends.jogl.JoglApplication;
 
 public class Main {
