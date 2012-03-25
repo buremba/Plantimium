@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +23,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 
-public class Game extends GIcombin {
+public class Game extends InputAdapter implements ApplicationListener {
 	private com.badlogic.gdx.graphics.OrthographicCamera camera;
 
 	private Box2DDebugRenderer debugRenderer;
