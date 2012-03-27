@@ -6,13 +6,18 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Game extends InputAdapter implements ApplicationListener {
 	private OrthographicCamera camera;
 	public SpriteBatch batch;
 	//private World world; /*next update*/
 	
-	protected SceneManager sceneManager;
+	public float deltaTime;
+	public float lastFrameTime;
+	
+	public SceneManager sceneManager;
+	GL10 gl;
 	
 	public boolean needsGL20(){
 		return false;
@@ -27,6 +32,10 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		
 		onCreate();
 		
+		lastFrameTime = System.nanoTime();
+		
+		gl = Gdx.graphics.getGL10();
+		
 	}
 	
 	public void resume(){
@@ -34,10 +43,12 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	}
 
 	public void render (){
+		deltaTime = ( System.nanoTime() - lastFrameTime ) / 1000000000.0f;
+        lastFrameTime = System.nanoTime();
+        
 		sceneManager.updateAll(this);
 		onUpdate();
 		
-		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		camera.update();
@@ -50,7 +61,6 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		sceneManager.renderAll(this);
         
         batch.end();
-
 	}
 
 	public void resize (int width, int height) {
@@ -67,4 +77,9 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	
 	public abstract void onCreate();
 	public abstract void onUpdate();
+	
+	public Vector2 relativeMousePos(){
+		return new Vector2(	Gdx.input.getX()+camera.position.x-Gdx.graphics.getWidth()/2,
+				-Gdx.input.getY()+camera.position.y+Gdx.graphics.getHeight()/2);
+	}
 }

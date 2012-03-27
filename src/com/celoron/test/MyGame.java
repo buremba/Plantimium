@@ -10,9 +10,10 @@ public class MyGame extends Game {
 
 	@Override
 	public void onCreate() {
-		Entity e= new Entity("player");
+		Entity e= new Entity("player", this);
 		e.AddComponent( new TextureRender("render", new Texture(Gdx.files.internal("data/badlogicsmall.jpg")) ) );
-		e.AddComponent( new WASD_ControllerComponent("wasd") );
+		e.AddComponent( new PlayerControl("control", 80) );
+		e.AddComponent( new BulletFirer("weapon") );
 		
 		sceneManager.addEntity(e);
 	}
@@ -22,6 +23,9 @@ public class MyGame extends Game {
 		/*
 		 * There is nothing i haveto think. after all components doing all work :D
 		 * */
+		
+		/*if(Gdx.graphics.getFramesPerSecond()<60)
+			Gdx.app.log("fps", ""+Gdx.graphics.getFramesPerSecond());*/
 	}
 	
     public static void main(String[] args) {

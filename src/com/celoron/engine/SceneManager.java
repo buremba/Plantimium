@@ -5,20 +5,39 @@ import java.util.List;
 
 public class SceneManager {
 	private List<Entity> entitys= new LinkedList<Entity>();
+	private List<Entity> entitysToAdd= new LinkedList<Entity>();
+	private List<Entity> entitysToRemove= new LinkedList<Entity>();
+	/*
+	 * why there is entitysToAdd?
+	 * because if you add entity on update, its cause to crash on loop.
+	 */
 	
 	public void updateAll(Game game){
+		for(Entity entity : entitysToAdd){entitys.add(entity);}
+		entitysToAdd.clear();
+		
+		for(Entity entity : entitysToRemove){
+			entity.removeAllComponent();
+			entitys.remove(entity);
+		}
+		entitysToRemove.clear();
+		
 		for(Entity entity : entitys){
-			entity.update(game);
+			entity.update();
 		}
 	}
 	
 	public void renderAll(Game game){
 		for(Entity entity : entitys){
-			entity.render(game);
+			entity.render();
 		}
 	}
 	
 	public void addEntity(Entity e){
-		entitys.add(e);
+		entitysToAdd.add(e);
+	}
+	
+	public void removeEntity(Entity e){
+		entitysToRemove.add(e);
 	}
 }

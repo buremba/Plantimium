@@ -1,11 +1,10 @@
 package com.celoron.engine;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector2;
 
 public class Entity {
-	 
     String id;
  
     Vector2 position;
@@ -14,20 +13,24 @@ public class Entity {
  
     RenderComponent renderComponent = null;
  
-    ArrayList<Component> components = null;
+    LinkedList<Component> components = null;
+    LinkedList<Component> componentsToRemove = new LinkedList<Component>();
+    
+    public Game game;
  
-    public Entity(String id){
+    public Entity(String id, Game game){
         this.id = id;
  
-        components = new ArrayList<Component>();
+        components = new LinkedList<Component>();
  
         position = new Vector2(0,0);
         scale = 1;
         rotation = 0;
+        
+        this.game=game;
     }
  
-    public void AddComponent(Component component)
-    {
+    public void AddComponent(Component component){
         if(RenderComponent.class.isInstance(component))
             renderComponent = (RenderComponent)component;
  
@@ -35,14 +38,17 @@ public class Entity {
         components.add(component);
     }
  
-    public Component getComponent(String id)
-    {
+    public Component getComponent(String id){
         for(Component comp : components){
 		    if ( comp.getId().equalsIgnoreCase(id) )
 		        return comp;
-	}
+        }
  
-	return null;
+        return null;
+    }
+    
+    public void removeComponent(Component comp){
+    	componentsToRemove.add(comp);
     }
  
     public Vector2 getPosition(){
@@ -50,11 +56,11 @@ public class Entity {
     }
  
     public float getScale(){
-	return scale;
+    	return scale;
     }
  
     public float getRotation(){
-	return rotation;
+    	return rotation;
     }
  
     public String getId(){
@@ -72,17 +78,30 @@ public class Entity {
     public void setScale(float scale) {
     	this.scale = scale;
     }
- 
-    public void update(Game game)
-    {
+    
+    public void start(){
         for(Component component : components){
-            component.update(game);
+            component.start();
+        }
+    }
+    
+    public void update(){
+    	for(Component component : componentsToRemove){
+    		components.remove(component);
+    	}
+    	componentsToRemove.clear();
+    	
+        for(Component component : components){
+            component.update();
         }
     }
  
-    public void render(Game game)
-    {
+    public void render(){
         if(renderComponent != null)
-            renderComponent.render(game);
+            renderComponent.render();
+    }
+    
+    public void removeAllComponent(){
+    	components.clear();
     }
 }

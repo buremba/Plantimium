@@ -1,7 +1,6 @@
 package com.celoron.test;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.celoron.engine.Game;
 import com.celoron.engine.RenderComponent;
 
 public class TextureRender extends RenderComponent {
@@ -13,13 +12,42 @@ public class TextureRender extends RenderComponent {
 	}
 
 	@Override
-	public void render(Game game) {
-		game.batch.draw(texture, owner.getPosition().x, owner.getPosition().y);
+	public void render() {
+		//game.batch.draw(texture, owner.getPosition().x - texture.getWidth()/2, owner.getPosition().y- texture.getHeight()/2);
+		
+		game.batch.draw(
+				texture, 
+				owner.getPosition().x - texture.getWidth()/2, 
+				owner.getPosition().y- texture.getHeight()/2, 
+				
+				texture.getWidth()/2, 
+				texture.getHeight()/2, 
+				
+				texture.getWidth(), /* strech */
+				texture.getHeight(), 
+				
+				owner.getScale(),
+				owner.getScale(), 
+				
+				owner.getRotation(), 
+				
+				0, 
+				0, 
+				
+				texture.getWidth(), 
+				texture.getHeight(), 
+				
+				false, /* flip x, y*/ 
+				false);
 	}
 
 	@Override
-	public void update(Game game) {
+	public void update() {
 		/* this empty for now */
+	}
+
+	@Override
+	public void start() {
 	}
 
 }

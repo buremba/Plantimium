@@ -7,5 +7,5 @@ public abstract class RenderComponent extends Component {
     	super(id);
     }
  
-    public abstract void render(Game game);
+    public abstract void render();
 }
