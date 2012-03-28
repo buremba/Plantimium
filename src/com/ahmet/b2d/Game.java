@@ -102,7 +102,6 @@ public class Game extends GIcombin implements InputProcessor {
 		debugRenderer.render(world, camera.combined);
 		
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.
 		batch.begin();
 		rs.Draw();
 		bk.Draw(null);
@@ -162,7 +161,7 @@ public class Game extends GIcombin implements InputProcessor {
 			hitBody.setAwake(true);
 		}else
 		{
-			//ak.addVertex(x, y);
+			ak.addVertex(x, y);
 			rs.stack.add(new Rect(new Vector2(x,Gdx.graphics.getHeight()-y),new Vector2(20,20),new Vector3(255,0,0),false));
 		}
 
