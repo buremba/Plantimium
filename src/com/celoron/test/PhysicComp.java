@@ -19,7 +19,7 @@ public class PhysicComp extends Component {
 		
 		this.btype=btype;
 		polygonShape = new PolygonShape();
-		polygonShape.setAsBox(dim.x, dim.y);
+		polygonShape.setAsBox(dim.x/2, dim.y/2); /* im dividing by 2 because box2d dimensin system */
 	}
 
 	@Override
@@ -38,6 +38,11 @@ public class PhysicComp extends Component {
 	public void update() {
 		owner.setPosition(body.getPosition());
 		owner.setRotation((float) (body.getAngle()*180/Math.PI));
+	}
+
+	@Override
+	public void remove() {
+		game.world.destroyBody(body);
 	}
 
 }

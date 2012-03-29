@@ -14,7 +14,7 @@ public class TextureRender extends RenderComponent {
 	}
 
 	@Override
-	public void render() {			
+	public void render() {
 		Gdx.gl10.glLoadIdentity();	
 		game.batch.draw(texture,
 				owner.getPosition().x - texture.getWidth() / 2,
@@ -44,6 +44,13 @@ public class TextureRender extends RenderComponent {
 
 	@Override
 	public void start() {
+		
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

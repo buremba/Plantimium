@@ -38,8 +38,6 @@ public class RectRender extends RenderComponent {
 		Gdx.gl10.glTranslatef(owner.getPosition().x, owner.getPosition().y, 0);
 		Gdx.gl10.glRotatef(owner.getRotation(), 0, 0, 1);
 		
-		Gdx.gl10.glColor4f(1, 1, 1, 1);
-		
 		mesh.render(GL10.GL_LINE_LOOP, 0, 4);
 
 	    Gdx.graphics.getGL10().glEnable(GL10.GL_TEXTURE_2D);
@@ -54,6 +52,12 @@ public class RectRender extends RenderComponent {
 
 	@Override
 	public void start() {
+		
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
 		
 	}
 

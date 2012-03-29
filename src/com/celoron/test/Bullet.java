@@ -17,7 +17,7 @@ public class Bullet extends Component {
 	@Override
 	public void update() {
 		life -= game.deltaTime;
-		owner.getPosition().add(speed.cpy().mul(game.deltaTime));
+		//owner.getPosition().add(speed.cpy().mul(game.deltaTime));
 
 		if (life < 0) {
 			game.sceneManager.removeEntity(owner);
@@ -26,7 +26,15 @@ public class Bullet extends Component {
 
 	@Override
 	public void start() {
+		PhysicComp pc= (PhysicComp) owner.getComponent(PhysicComp.class);
+		if(pc != null){
+			pc.body.setLinearVelocity(speed);
+		}
+	}
 
+	@Override
+	public void remove() {
+		
 	}
 
 }

@@ -38,15 +38,15 @@ public class Entity {
 		components.add(component);
 	}
 
-	public Component getComponent(String id) {
+	public Component getComponent(Class<?> c) {
 		for (Component comp : components) {
-			if (comp.getId().equalsIgnoreCase(id))
+			if ( c.isInstance(comp))
 				return comp;
 		}
 
 		return null;
 	}
-
+	
 	public void removeComponent(Component comp) {
 		componentsToRemove.add(comp);
 	}
@@ -102,6 +102,9 @@ public class Entity {
 	}
 
 	public void removeAllComponent() {
+		for (Component component : components) {
+			component.remove();
+		}
 		components.clear();
 	}
 }

@@ -18,10 +18,8 @@ public class CreatorComp extends Component {
 	@Override
 	public void update() {
 		timeToCreate-=game.deltaTime;
-		if (Gdx.input.isTouched()) {
-			if(timeToCreate<0)
-				create();
-		}
+		if(timeToCreate<0)
+			create();
 	}
 
 	public void create() {
@@ -30,19 +28,25 @@ public class CreatorComp extends Component {
 		
 		Entity e = new Entity("falling box", game);
 		e.setScale(scale);
-		e.setPosition(game.relativeMousePos());
+		e.setPosition(new Vector2(-200+generator.nextInt(400), 200));
 		e.AddComponent(new TextureRender("render", new Texture(Gdx.files.internal("data/box.jpg"))));
-		e.AddComponent(new PhysicComp("phy", new Vector2(128, 128).mul(scale), BodyType.DynamicBody));
+		e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
 		//e.AddComponent(new RectRender("render", new Vector2(30, 30).mul(scale)));
-
+		
 		game.sceneManager.addEntity(e);
 		
-		timeToCreate=0.3f;
+		timeToCreate=0.5f;
 	}
 
 	@Override
 	public void start() {
 
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -16,21 +16,23 @@ public class PlayerControl extends Component {
 
 	@Override
 	public void update() {
+		PhysicComp pc= (PhysicComp) owner.getComponent(PhysicComp.class);
+		if(pc == null){
+			Gdx.app.log("a", "x");
+			return;
+		}
+		
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			owner.setPosition(owner.getPosition().add(
-					new Vector2(-1 * speed * game.deltaTime, 0)));
+			pc.body.applyForceToCenter(new Vector2(-1*speed,0));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			owner.setPosition(owner.getPosition().add(
-					new Vector2(0, -1 * speed * game.deltaTime)));
+			pc.body.applyForceToCenter(new Vector2(0,-1*speed));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			owner.setPosition(owner.getPosition().add(
-					new Vector2(0, speed * game.deltaTime)));
+			pc.body.applyForceToCenter(new Vector2(0,1*speed));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			owner.setPosition(owner.getPosition().add(
-					new Vector2(speed * game.deltaTime, 0)));
+			pc.body.applyForceToCenter(new Vector2(1*speed,0));
 		}
 
 		Vector2 v = game.relativeMousePos().sub(owner.getPosition());
@@ -42,7 +44,13 @@ public class PlayerControl extends Component {
 
 	@Override
 	public void start() {
+		
+	}
 
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
