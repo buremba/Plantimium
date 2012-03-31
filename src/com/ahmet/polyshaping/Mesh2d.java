@@ -1,5 +1,7 @@
 package com.ahmet.polyshaping;
 
+import java.util.ArrayList;
+
 import com.ahmet.b2d.Tools;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,9 +19,11 @@ public class Mesh2d {
 	private Vector2[] triVertexList;
 	private int renderMode=GL10.GL_POINTS;
 	public float PointSize=1,LineWidth=1;
+	
 	private Vector3 color=new Vector3(255,255,255);
 	private Vector2 pos,dim=new Vector2(50,50);
 	public float angle=0;
+	
 	Mesh2d(){}
 	Mesh2d(Vector2 Pos,Vector3 Color)
 	{
@@ -110,9 +114,32 @@ public class Mesh2d {
 		triVertexList=Tools.Triangulate(vertexlist2);
 		setRenderMode(renderMode);
 	}
-	public Vector2 getClosestVertexPosition(float x,float y)
+	public void addVertex(float x,float y,Vector2 after)
 	{
-		Vector2 pos=new Vector2();
+		Vector2[] vertexlist2=new Vector2[polygonVertexList.length+1];
+		for(int i=0; i<polygonVertexList.length; i++)
+		{
+			vertexlist2[i]=polygonVertexList[i];
+		}
+		vertexlist2[polygonVertexList.length]=new Vector2(x-pos.x,y-pos.y);
+		polygonVertexList=vertexlist2;
+		triVertexList=Tools.Triangulate(vertexlist2);
+		setRenderMode(renderMode);
+	}
+	public void getAdded(float x,float y)
+	{
+		ArrayList<Vector2> temp=new ArrayList<Vector2>();
+		for(int i=0; i<polygonVertexList.length; i++)
+		{
+			temp.add(polygonVertexList[i]);
+		}
+		temp.add(getClosestVertexIndex(x,y),new Vector2(x,y));
+		setVertices(temp.toArray(new Vector2[0]));
+		setRenderMode(renderMode);
+	}
+	public int getClosestVertexIndex(float x,float y)
+	{
+		int indis=0;
 		float minhip=(float) Math.hypot(polygonVertexList[0].x-x, polygonVertexList[0].y-y);
 		for(int i=0; i<polygonVertexList.length; i++)
 		{
@@ -120,10 +147,14 @@ public class Mesh2d {
 			if(temp<minhip)
 			{
 				minhip=temp;
-				pos=polygonVertexList[i];
+				indis=i;
 			}
 		}
-		return pos;
+		return indis;
+	}
+	public Vector2 getVertex(int i)
+	{
+		return polygonVertexList[i];
 	}
 	public Vector2[] getVertices()
 	{

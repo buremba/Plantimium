@@ -49,18 +49,17 @@ public class Game2 extends GIcombin implements InputProcessor {
 		gl.glEnable(GL10.GL_TEXTURE_2D);	
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		ak.Draw(batch);
-		r1.Draw(batch);	
-		l1.Draw(batch);
+		r1.Draw(batch);			
 		e1.Draw(batch);
 		if(touchDown)
 		{
-			
+			l1.Draw(batch);
 			
 		}
 	}
 	@Override
 	public boolean touchUp (int x, int y, int pointer, int button) {
-		ak.addVertex(x, Gdx.graphics.getHeight()-y);
+		ak.getAdded(x, Gdx.graphics.getHeight()-y);
 		touchDown=false;
 		return false;
 	}
@@ -68,7 +67,7 @@ public class Game2 extends GIcombin implements InputProcessor {
 	public boolean touchMoved (int x, int y) {
 		e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
 		l1.setPos2(new Vector2(x,Gdx.graphics.getHeight()-y));
-		l1.setPos1(ak.getClosestVertexPosition(x,Gdx.graphics.getHeight()-y));
+		l1.setPos1(ak.getVertex(ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y)));
 		return false;
 	}
 	@Override
