@@ -21,7 +21,6 @@ public class Line extends Mesh2d {
 		super.setVertices(new Vector2[]{
 				new Vector2(a1.x,a1.y),
 				new Vector2(a2.x,a2.y)});
-		setFill(false);
 	}
 	public void setPos2(Vector2 p)
 	{
@@ -29,6 +28,5 @@ public class Line extends Mesh2d {
 		super.setVertices(new Vector2[]{
 				new Vector2(a1.x,a1.y),
 				new Vector2(a2.x,a2.y)});
-		setFill(false);
 	}
 }

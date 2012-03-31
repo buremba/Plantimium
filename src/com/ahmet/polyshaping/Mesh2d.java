@@ -41,6 +41,7 @@ public class Mesh2d {
 	{
 		polygonVertexList=vertexlist;
 		triVertexList=Tools.Triangulate(polygonVertexList);		
+		setRenderMode(renderMode);
 	}
 	public void setFill(boolean fill)
 	{
@@ -110,9 +111,7 @@ public class Mesh2d {
 			vertexlist2[i]=polygonVertexList[i];
 		}
 		vertexlist2[polygonVertexList.length]=new Vector2(x-pos.x,y-pos.y);
-		polygonVertexList=vertexlist2;
-		triVertexList=Tools.Triangulate(vertexlist2);
-		setRenderMode(renderMode);
+		setVertices(vertexlist2);
 	}
 	public void addVertex(float x,float y,Vector2 after)
 	{
@@ -122,9 +121,7 @@ public class Mesh2d {
 			vertexlist2[i]=polygonVertexList[i];
 		}
 		vertexlist2[polygonVertexList.length]=new Vector2(x-pos.x,y-pos.y);
-		polygonVertexList=vertexlist2;
-		triVertexList=Tools.Triangulate(vertexlist2);
-		setRenderMode(renderMode);
+		setVertices(vertexlist2);
 	}
 	public void getAdded(float x,float y)
 	{
@@ -135,7 +132,11 @@ public class Mesh2d {
 		}
 		temp.add(getClosestVertexIndex(x,y),new Vector2(x,y));
 		setVertices(temp.toArray(new Vector2[0]));
-		setRenderMode(renderMode);
+	}
+	public void setVertex(int i,float x,float y)
+	{
+		polygonVertexList[i]=new Vector2(x,y);
+		setVertices(polygonVertexList);
 	}
 	public int getClosestVertexIndex(float x,float y)
 	{
