@@ -110,6 +110,21 @@ public class Mesh2d {
 		triVertexList=Tools.Triangulate(vertexlist2);
 		setRenderMode(renderMode);
 	}
+	public Vector2 getClosestVertexPosition(float x,float y)
+	{
+		Vector2 pos=new Vector2();
+		float minhip=(float) Math.hypot(polygonVertexList[0].x-x, polygonVertexList[0].y-y);
+		for(int i=0; i<polygonVertexList.length; i++)
+		{
+			float temp=(float) Math.hypot(polygonVertexList[i].x-x, polygonVertexList[i].y-y);
+			if(temp<minhip)
+			{
+				minhip=temp;
+				pos=polygonVertexList[i];
+			}
+		}
+		return pos;
+	}
 	public Vector2[] getVertices()
 	{
 		return this.polygonVertexList;

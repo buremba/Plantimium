@@ -36,7 +36,7 @@ public class Game2 extends GIcombin implements InputProcessor {
 		Vector2[] vv={
 				new Vector2(0,0)
 		};	
-		ak=new Mesh2d(vv,new Vector2(100,100),new Vector3(255,0,0),false);
+		ak=new Mesh2d(vv,new Vector2(0,0),new Vector3(255,0,0),false);
 		ak.setRenderMode(GL10.GL_LINE_LOOP);
 		r1=new Rect(new Vector2(300,100),new Vector2(50,50),new Vector3(255,0,0),false);
 		e1=new Ellipse(new Vector2(60,60),new Vector2(25,25),new Vector3(255,0,0),false);
@@ -49,11 +49,13 @@ public class Game2 extends GIcombin implements InputProcessor {
 		gl.glEnable(GL10.GL_TEXTURE_2D);	
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		ak.Draw(batch);
-		r1.Draw(batch);		
+		r1.Draw(batch);	
+		l1.Draw(batch);
+		e1.Draw(batch);
 		if(touchDown)
 		{
-			e1.Draw(batch);
-			l1.Draw(batch);
+			
+			
 		}
 	}
 	@Override
@@ -63,15 +65,15 @@ public class Game2 extends GIcombin implements InputProcessor {
 		return false;
 	}
 	@Override
-	public boolean touchDragged (int x, int y, int pointer) {
+	public boolean touchMoved (int x, int y) {
 		e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
 		l1.setPos2(new Vector2(x,Gdx.graphics.getHeight()-y));
+		l1.setPos1(ak.getClosestVertexPosition(x,Gdx.graphics.getHeight()-y));
 		return false;
 	}
 	@Override
 	public boolean touchDown (int x, int y, int pointer, int newParam) {
 		touchDown=true;
-		l1.setPos1(new Vector2(x,Gdx.graphics.getHeight()-y));
 		e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
 		return false;
 	}
