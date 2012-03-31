@@ -1,0 +1,14 @@
+INDEX VERSION 1.126+C:\Users\ahmet\Desktop\ews2\bioloid2\.metadata\.plugins\org.eclipse.jdt.core
+312666105.index
+3000053649.index
+1789169078.index
+3277441100.index
+3270002986.index
+3730526690.index
+3585733931.index
+4251467834.index
+1977103563.index
+909674662.index
+2877109961.index
+81242678.index
+3737183724.index
