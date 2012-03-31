@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Tools {
 	static EarClippingTriangulator ect=new EarClippingTriangulator();
-	static Vector2[] Triangulate(Vector2[] path)
+	public static Vector2[] Triangulate(Vector2[] path)
 	{
 		
 		List<Vector2> alist=new ArrayList<Vector2>();
