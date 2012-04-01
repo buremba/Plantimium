@@ -130,7 +130,7 @@ public class Mesh2d {
 		{
 			temp.add(polygonVertexList[i]);
 		}
-		temp.add(getClosestVertexIndex(x,y),new Vector2(x,y));
+		temp.add(getClosestVertexIndex(x,y)+1,new Vector2(x,y));
 		setVertices(temp.toArray(new Vector2[0]));
 	}
 	public void setVertex(int i,float x,float y)

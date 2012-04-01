@@ -29,6 +29,7 @@ public class Game2 extends GIcombin implements InputProcessor {
 	Line l1;
 	boolean touchDown;
 	int indis2Change;
+	boolean vertexLock=false;
 	@Override
 	public void create () {
 
