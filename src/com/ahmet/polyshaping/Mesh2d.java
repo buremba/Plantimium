@@ -40,7 +40,7 @@ public class Mesh2d {
 	public void setVertices(Vector2[] vertexlist)
 	{
 		polygonVertexList=vertexlist;
-		triVertexList=Tools.Triangulate(polygonVertexList);		
+		//triVertexList=Tools.Triangulate(polygonVertexList);		
 		setRenderMode(renderMode);
 	}
 	public void setFill(boolean fill)

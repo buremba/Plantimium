@@ -39,7 +39,7 @@ public class Game2 extends GIcombin implements InputProcessor {
 				new Vector2(0,0)
 		};	
 		ak=new Mesh2d(vv,new Vector2(0,0),new Vector3(255,0,0),false);
-		ak.setRenderMode(GL10.GL_LINE_LOOP);
+		//ak.setRenderMode(GL10.GL_LINE_LOOP);
 		r1=new Rect(new Vector2(300,100),new Vector2(50,50),new Vector3(255,0,0),false);
 		e1=new Ellipse(new Vector2(60,60),new Vector2(25,25),new Vector3(255,0,0),false);
 		l1=new Line(new Vector2(60,60),new Vector2(100,100),new Vector3(255,255,255));
