@@ -12,14 +12,18 @@ import com.badlogic.gdx.physics.box2d.World;
 public abstract class Game extends InputAdapter implements ApplicationListener {
 	private OrthographicCamera camera;
 	public SpriteBatch batch;
-	// private World world; /*next update*/
 
+	/* to calculate fdt: frame delta time */
 	public float deltaTime;
 	public float lastFrameTime;
 
+	/* scene manager to manage entitys */
 	public SceneManager sceneManager;
+	
+	/* its for referencing to gl function */
 	public GL10 gl;
 
+	/* box2d world object */
 	public World world;
 
 	public boolean needsGL20() {
@@ -38,9 +42,9 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 		world = new World(new Vector2(0, -50), true);
 
-
 		lastFrameTime = System.nanoTime();
 		
+		/* this actually call game logic creating, not game engine */
 		onCreate();
 	}
 
@@ -49,21 +53,31 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	}
 
 	public void render() {
+		/* calculation of fdt */
 		deltaTime = (System.nanoTime() - lastFrameTime) / 1000000000.0f;
 		lastFrameTime = System.nanoTime();
 
+		/*
+		 * 1.update physic 
+		 * 2.update all entity, and its components
+		 * 3.update game logic (class that extends from Game)
+		 * */
+		world.step(deltaTime, 8, 3);
 		sceneManager.updateAll(this);
 		onUpdate();
-		world.step(deltaTime, 8, 3);
 
+		/* clear screen */
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		/* stupid camera methods */
 		camera.update();
 		camera.apply(gl);
 
+		/* batch begin for texture rendering */
 		batch.begin();
 		batch.getProjectionMatrix().set(camera.combined);
 
+		/* and finally render everything */
 		sceneManager.renderAll(this);
 
 		batch.end();
@@ -85,6 +99,8 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 	public abstract void onUpdate();
 
+	/* this method give actual position of final mouse clicked 
+	 * why this method in Game class? well, because f*ck you thats why*/
 	public Vector2 relativeMousePos() {
 		return new Vector2(Gdx.input.getX() + camera.position.x
 				- Gdx.graphics.getWidth() / 2, -Gdx.input.getY()

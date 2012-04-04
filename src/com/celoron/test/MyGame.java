@@ -1,8 +1,6 @@
 package com.celoron.test;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.jogl.JoglApplication;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.celoron.engine.Entity;
@@ -20,25 +18,25 @@ public class MyGame extends Game {
 
 		sceneManager.addEntity(e);
 		
-		e= new Entity("cliker", this);
-		e.AddComponent(new CreatorComp("create"));
+		Entity e2= new Entity("cliker", this);
+		e2.AddComponent(new CreatorComp("create"));
 		
-		sceneManager.addEntity(e);
+		sceneManager.addEntity(e2);
 		
-		player= new Entity("player",this);
+		/*player= new Entity("player",this);
 		player.setPosition(new Vector2(0,0));
 		player.AddComponent(new PhysicComp("phy", new Vector2(32,32), BodyType.DynamicBody));
 		player.AddComponent(new PlayerControl("controller", 1000000));
 		player.AddComponent(new BulletFirer("firer"));
 		player.AddComponent( new TextureRender("render", new Texture(Gdx.files.internal("data/badlogicsmall.jpg"))));
 		
-		sceneManager.addEntity(player);
+		sceneManager.addEntity(player);*/
 	}
 
 	@Override
 	public void onUpdate() {
 		/*
-		 * There is nothing i haveto think. after all components doing all work
+		 * There is nothing i have to think. after all components doing all work
 		 * :D
 		 */
 	}

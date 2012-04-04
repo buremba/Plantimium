@@ -10,9 +10,17 @@ import com.celoron.engine.Component;
 import com.celoron.engine.Entity;
 
 public class CreatorComp extends Component {
-	private float timeToCreate=0;
+	private float timeToCreate;
+	Random generator;
+	
+	static Texture t; /* temporarly */
 	public CreatorComp(String id) {
 		super(id);
+		
+		timeToCreate=0;
+		generator = new Random();
+		
+		t=new Texture(Gdx.files.internal("data/box.jpg"));
 	}
 
 	@Override
@@ -23,19 +31,25 @@ public class CreatorComp extends Component {
 	}
 
 	public void create() {
-		Random generator = new Random();
 		float scale= (float) (generator.nextDouble()+1)/10;
 		
 		Entity e = new Entity("falling box", game);
+		
 		e.setScale(scale);
-		e.setPosition(new Vector2(-200+generator.nextInt(400), 200));
-		e.AddComponent(new TextureRender("render", new Texture(Gdx.files.internal("data/box.jpg"))));
+		
+		/* trying to save memory */
+		/*e.setPosition(new Vector2(-200+generator.nextInt(400), 200));*/
+		e.getPosition().x = -200+generator.nextInt(400);
+		e.getPosition().y = 200;
+		
+		e.AddComponent(new TextureRender("render", t));
 		e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
-		//e.AddComponent(new RectRender("render", new Vector2(30, 30).mul(scale)));
+		
+		//e.AddComponent(new RectRender("render", new Vector2(256, 256).mul(scale)));
 		
 		game.sceneManager.addEntity(e);
 		
-		timeToCreate=0.5f;
+		timeToCreate=1.0f;
 	}
 
 	@Override
@@ -45,7 +59,6 @@ public class CreatorComp extends Component {
 
 	@Override
 	public void remove() {
-		// TODO Auto-generated method stub
 		
 	}
 

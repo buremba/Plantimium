@@ -19,7 +19,7 @@ public class PhysicComp extends Component {
 		
 		this.btype=btype;
 		polygonShape = new PolygonShape();
-		polygonShape.setAsBox(dim.x/2, dim.y/2); /* im dividing by 2 because box2d dimensin system */
+		polygonShape.setAsBox(dim.x/2, dim.y/2); /* im dividing by 2 because box2d dimension system */
 	}
 
 	@Override

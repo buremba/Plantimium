@@ -11,10 +11,10 @@ public class Entity {
 	float scale;
 	float rotation;
 
-	RenderComponent renderComponent = null;
+	RenderComponent renderComponent;
 
-	LinkedList<Component> components = null;
-	LinkedList<Component> componentsToRemove = new LinkedList<Component>();
+	LinkedList<Component> components;
+	LinkedList<Component> componentsToRemove;
 
 	public Game game;
 
@@ -22,6 +22,7 @@ public class Entity {
 		this.id = id;
 
 		components = new LinkedList<Component>();
+		componentsToRemove = new LinkedList<Component>();
 
 		position = new Vector2(0, 0);
 		scale = 1;
