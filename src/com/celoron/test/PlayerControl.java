@@ -35,10 +35,12 @@ public class PlayerControl extends Component {
 			pc.body.applyForceToCenter(new Vector2(1*speed,0));
 		}
 
+		/*
 		Vector2 v = game.relativeMousePos().sub(owner.getPosition());
 		double angle = Math.acos(v.nor().dot(new Vector2(1, 0)));
 		if (v.y < 0)
 			angle = 2 * Math.PI - angle;
+			*/
 		//owner.setRotation((float) (angle / Math.PI * 180) - 90);
 	}
 

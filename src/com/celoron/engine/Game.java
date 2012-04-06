@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -25,6 +26,8 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 	/* box2d world object */
 	public World world;
+	
+	public BitmapFont font;
 
 	public boolean needsGL20() {
 		return false;
@@ -43,6 +46,9 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		world = new World(new Vector2(0, -50), true);
 
 		lastFrameTime = System.nanoTime();
+		
+		font = new BitmapFont(Gdx.files.internal("data/font/tahoma.fnt"), Gdx.files.internal("data/font/tahoma.png"), false);
+		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		/* this actually call game logic creating, not game engine */
 		onCreate();
@@ -76,10 +82,11 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		/* batch begin for texture rendering */
 		batch.begin();
 		batch.getProjectionMatrix().set(camera.combined);
-
+		
 		/* and finally render everything */
 		sceneManager.renderAll(this);
-
+		onRender();
+		
 		batch.end();
 	}
 
@@ -99,11 +106,20 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 	public abstract void onUpdate();
 
+	/* this is just for experimantel method. please dont use this */
+	public void onRender(){}
+
 	/* this method give actual position of final mouse clicked 
 	 * why this method in Game class? well, because f*ck you thats why*/
 	public Vector2 relativeMousePos() {
 		return new Vector2(Gdx.input.getX() + camera.position.x
 				- Gdx.graphics.getWidth() / 2, -Gdx.input.getY()
+				+ camera.position.y + Gdx.graphics.getHeight() / 2);
+	}
+	
+	public Vector2 convertMousePos(Vector2 v){
+		return new Vector2(v.x + camera.position.x
+				- Gdx.graphics.getWidth() / 2, -v.y
 				+ camera.position.y + Gdx.graphics.getHeight() / 2);
 	}
 }
