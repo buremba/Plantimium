@@ -1,21 +1,17 @@
 package com.celoron.guiTest;
 
-import java.util.Random;
+import java.io.FileNotFoundException;
 
-import com.badlogic.gdx.Gdx;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import com.badlogic.gdx.backends.jogl.JoglApplication;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.celoron.engine.Entity;
 import com.celoron.engine.Game;
 import com.celoron.engine.GuiButton;
-import com.celoron.test.PhysicComp;
-import com.celoron.test.TextureRender;
 
 public class GuiTest extends Game {
-	/* for dragging */
-
 	@Override
 	public void onCreate() {
 		
@@ -28,22 +24,20 @@ public class GuiTest extends Game {
 		{
 			/* and overriding onClick function */
 			protected void onClick(){
-				Gdx.app.log("button", "clicked");
-
-				/* create box that falling with gravity */
-				Random generator = new Random();
-				Texture t=asset.getTexture("data/box.jpg");
-				float scale= (float) (generator.nextDouble()+1)/10;
 				
-				Entity e = new Entity("falling box", game);
+				/* create script engine */
+				ScriptEngineManager manager = new ScriptEngineManager();
+		        ScriptEngine engine = manager.getEngineByName("JavaScript");
+		        
+		        /* scrit can use game object */
+		        engine.put("game", game);
+		        
+		        try {
+					engine.eval(new java.io.FileReader("data/click.js"));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				
-				e.setScale(scale);
-				e.getPosition().x = -Gdx.graphics.getWidth()/4+generator.nextInt(Gdx.graphics.getWidth()/2);
-				e.getPosition().y = Gdx.graphics.getHeight()/4;
-				
-				e.AddComponent(new TextureRender("render", t));
-				e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
-				game.scene.addEntity(e);
 			}
 		};
 		
