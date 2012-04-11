@@ -18,8 +18,11 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	public float deltaTime;
 	public float lastFrameTime;
 
-	/* scene manager to manage entitys */
-	public SceneManager sceneManager;
+	/* Managers */
+	public SceneManager scene; /* scene manager to manage entitys */
+	public InputManager input;
+	public AssetManager asset;
+	public GuiManager gui;
 	
 	/* its for referencing to gl function */
 	public GL10 gl;
@@ -39,14 +42,22 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		camera.position.set(0, 0, 0);
 		batch = new SpriteBatch();
 
-		sceneManager = new SceneManager();
+		scene = new SceneManager();
+		asset= new AssetManager();
+		input= new InputManager();
+		gui= new GuiManager(this);
+		
+		/* set main input listener */
+		Gdx.input.setInputProcessor(input);
 
 		gl = Gdx.graphics.getGL10();
 
+		/* create physic world */
 		world = new World(new Vector2(0, -50), true);
 
 		lastFrameTime = System.nanoTime();
 		
+		/* load default font */
 		font = new BitmapFont(Gdx.files.internal("data/font/tahoma.fnt"), Gdx.files.internal("data/font/tahoma.png"), false);
 		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
@@ -69,10 +80,11 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		 * 3.update game logic (class that extends from Game)
 		 * */
 		world.step(deltaTime, 8, 3);
-		sceneManager.updateAll(this);
+		scene.updateAll(this);
 		onUpdate();
 
 		/* clear screen */
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		/* stupid camera methods */
@@ -81,10 +93,13 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 		/* batch begin for texture rendering */
 		batch.begin();
+		
+		gui.renderAll();
+		
 		batch.getProjectionMatrix().set(camera.combined);
 		
 		/* and finally render everything */
-		sceneManager.renderAll(this);
+		scene.renderAll(this);
 		onRender();
 		
 		batch.end();

@@ -9,8 +9,8 @@ public class TextRender extends RenderComponent {
 	public TextRender(String id, String str, Color color) {
 		super(id);
 		
-		this.color=color;
-		this.str=str;
+		setColor(color);
+		setText(str);
 	}
 
 	@Override
@@ -29,6 +29,22 @@ public class TextRender extends RenderComponent {
 	public void remove() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void setText(String str){
+		this.str=str;
+	}
+	
+	public String getText(){
+		return str;
+	}
+	
+	public void setColor(Color color){
+		this.color=color;
+	}
+	
+	public Color getColor(){
+		return color;
 	}
 
 }

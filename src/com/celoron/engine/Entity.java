@@ -2,6 +2,7 @@ package com.celoron.engine;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
 public class Entity {
@@ -11,6 +12,7 @@ public class Entity {
 	float scale;
 	float rotation;
 
+	boolean visible=true;
 	RenderComponent renderComponent;
 
 	LinkedList<Component> components;
@@ -34,6 +36,11 @@ public class Entity {
 	public void AddComponent(Component component) {
 		if (RenderComponent.class.isInstance(component))
 			renderComponent = (RenderComponent) component;
+		
+		/* if component need input, well then add it to input listeners list */
+		if (InputProcessor.class.isInstance(component)){
+			game.input.addListener( (InputProcessor)component );
+		}
 
 		component.setOwnerEntity(this);
 		components.add(component);
@@ -98,7 +105,7 @@ public class Entity {
 	}
 
 	public void render() {
-		if (renderComponent != null)
+		if (renderComponent != null && visible)
 			renderComponent.render();
 	}
 
@@ -107,5 +114,9 @@ public class Entity {
 			component.remove();
 		}
 		components.clear();
+	}
+	
+	public void setVisible(boolean visible){
+		this.visible=visible;
 	}
 }

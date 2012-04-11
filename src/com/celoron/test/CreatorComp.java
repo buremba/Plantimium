@@ -39,15 +39,15 @@ public class CreatorComp extends Component {
 		
 		/* trying to save memory */
 		/*e.setPosition(new Vector2(-200+generator.nextInt(400), 200));*/
-		e.getPosition().x = -200+generator.nextInt(400);
-		e.getPosition().y = 200;
+		e.getPosition().x = -Gdx.graphics.getWidth()/4+generator.nextInt(Gdx.graphics.getWidth()/2);
+		e.getPosition().y = Gdx.graphics.getHeight()/4;
 		
 		e.AddComponent(new TextureRender("render", t));
 		e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
 		
 		//e.AddComponent(new RectRender("render", new Vector2(256, 256).mul(scale)));
 		
-		game.sceneManager.addEntity(e);
+		game.scene.addEntity(e);
 		
 		timeToCreate=1.0f;
 	}

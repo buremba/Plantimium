@@ -26,18 +26,20 @@ public class BulletFirer extends Component {
 
 	public void fire() {
 		Vector2 mpos = game.relativeMousePos();
-		Vector2 v = mpos.sub(owner.getPosition()).nor().mul(500);
+		Vector2 v = mpos.sub(owner.getPosition()).nor();
+		Vector2 delta= v.cpy();
+		delta.mul(30);
 
 		Entity bullet = new Entity("bullet", game);
 		bullet.setScale(0.5f);
-		bullet.setPosition(owner.getPosition().cpy());
+		bullet.setPosition(owner.getPosition().cpy().add(delta));
 		/*bullet.AddComponent(new TextureRender("render", new Texture(Gdx.files
 				.internal("data/bullet.png"))));*/
 		bullet.AddComponent(new RectRender("render", new Vector2(10,10) ));
 		bullet.AddComponent(new PhysicComp("phy", new Vector2(10,10), BodyType.DynamicBody));
-		bullet.AddComponent(new Bullet("bullets", v, 10));
+		bullet.AddComponent(new Bullet("bullets", v.mul(50000), 10));
 		
-		game.sceneManager.addEntity(bullet);
+		game.scene.addEntity(bullet);
 
 		timeToFire = 0.1f;
 	}

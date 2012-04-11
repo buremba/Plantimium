@@ -15,7 +15,7 @@ public class TextureRender extends RenderComponent {
 
 	@Override
 	public void render() {
-		Gdx.gl10.glLoadIdentity();	
+		Gdx.gl10.glLoadIdentity();
 		game.batch.draw(texture,
 				owner.getPosition().x - texture.getWidth() / 2,
 				owner.getPosition().y - texture.getHeight() / 2,

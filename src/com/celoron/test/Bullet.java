@@ -20,7 +20,7 @@ public class Bullet extends Component {
 		//owner.getPosition().add(speed.cpy().mul(game.deltaTime));
 
 		if (life < 0) {
-			game.sceneManager.removeEntity(owner);
+			game.scene.removeEntity(owner);
 		}
 	}
 

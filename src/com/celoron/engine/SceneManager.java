@@ -3,7 +3,7 @@ package com.celoron.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SceneManager {
+public class SceneManager {	
 	private List<Entity> entitys;
 	private List<Entity> entitysToAdd;
 	private List<Entity> entitysToRemove;
