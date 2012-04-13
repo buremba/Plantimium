@@ -38,11 +38,11 @@ public class GuiManager {
 		}
 	}
 
-	public void addEntity(GuiObject e) {
+	public void addGuiObject(GuiObject e) {
 		objectsToAdd.add(e);
 	}
 
-	public void removeEntity(GuiObject e) {
+	public void removeGuiObject(GuiObject e) {
 		objectsToRemove.add(e);
 	}
 	

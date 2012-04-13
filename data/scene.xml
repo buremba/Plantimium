@@ -1,0 +1,59 @@
+<scene>
+
+    <script>
+    importPackage(com.celoron.engine); 
+    importPackage(com.celoron.test); 
+    importPackage(java.util); 
+    importPackage(com.badlogic.gdx.graphics); 
+    importPackage(com.badlogic.gdx); 
+    importPackage(com.badlogic.gdx.math); 
+    importPackage(com.badlogic.gdx.physics.box2d); 
+
+    /* create plane to box not falling from bottom of screen */
+    e = new Entity("plane", game);
+    e.setPosition(new Vector2(0,-Gdx.graphics.getHeight()/2));
+    e.AddComponent(new PhysicComp("phy", new Vector2(Gdx.graphics.getWidth(),1), BodyDef.BodyType.StaticBody));
+    e.AddComponent(new RectRender("render", new Vector2(Gdx.graphics.getWidth(),1)));
+    game.scene.addEntity(e);
+    
+    /* function that create random physical box */
+    function createBox(){
+        generator = new Random();
+        t=game.asset.getTexture("data/box.jpg");
+        scale= (generator.nextDouble()+1)/10;
+
+        entity = new Entity("falling box", game);
+
+        entity.setScale(scale);
+        entity.getPosition().x = -Gdx.graphics.getWidth()/4+generator.nextInt(Gdx.graphics.getWidth()/2);
+        entity.getPosition().y = Gdx.graphics.getHeight()/4;
+
+        entity.AddComponent(new TextureRender("render", t));
+        entity.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyDef.BodyType.DynamicBody));
+        game.scene.addEntity(entity);
+    }
+    </script>
+
+    <button>
+        <position x="-64" y="-32" />
+        <imgnormal src="data/bNormal.png" />
+        <imghover src="data/bHover.png" />
+
+        <action>
+            createBox();
+        </action>
+    </button>
+
+    <button>
+        <position x="-64" y="-100" />
+        <imgnormal src="data/bNormal.png" />
+        <imghover src="data/bHover.png" />
+
+        <action>
+        importPackage(com.badlogic.gdx); 
+        
+        Gdx.app.log("deneme", "hehe this not do anything");
+        </action>
+    </button>
+
+</scene>

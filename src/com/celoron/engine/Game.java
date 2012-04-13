@@ -1,5 +1,16 @@
 package com.celoron.engine;
 
+import java.io.File;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -11,7 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Game extends InputAdapter implements ApplicationListener {
-	private OrthographicCamera camera;
+	public OrthographicCamera camera;
 	public SpriteBatch batch;
 
 	/* to calculate fdt: frame delta time */
@@ -31,6 +42,9 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	public World world;
 	
 	public BitmapFont font;
+	
+	/* scripting */
+    ScriptEngine script;
 
 	public boolean needsGL20() {
 		return false;
@@ -61,8 +75,65 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		font = new BitmapFont(Gdx.files.internal("data/font/tahoma.fnt"), Gdx.files.internal("data/font/tahoma.png"), false);
 		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
+
+		ScriptEngineManager manager = new ScriptEngineManager();
+	    script = manager.getEngineByName("JavaScript");
+	    script.put("game", this);
+		
 		/* this actually call game logic creating, not game engine */
 		onCreate();
+	}
+	
+	public void loadScene(String file){
+		File fXmlFile = new File(file);
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder;
+		try {
+			
+			dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(fXmlFile);
+			doc.getDocumentElement().normalize();
+			
+			NodeList scripts = doc.getElementsByTagName("script");
+			for (int i = 0; i < scripts.getLength(); i++){
+				script.eval(scripts.item(i).getChildNodes().item(0).getNodeValue());
+			}
+
+			NodeList buttons = doc.getElementsByTagName("button");
+			for (int i = 0; i < buttons.getLength(); i++) {
+				Element button = (Element) buttons.item(i);
+				
+				Element epos = (Element) button.getElementsByTagName("position").item(0);
+				Vector2 pos= new Vector2(Integer.parseInt(epos.getAttribute("x")), Integer.parseInt(epos.getAttribute("y")));
+				
+				Element img = (Element) button.getElementsByTagName("imgnormal").item(0);
+				Element imgHover = (Element) button.getElementsByTagName("imghover").item(0);
+				Element action = (Element) button.getElementsByTagName("action").item(0);
+				
+				GuiButton b= new GuiButton(
+						this, /* game class reference */
+						pos, /* button position */ 
+						asset.getTexture(img.getAttribute("src")), /* normal img */
+						asset.getTexture(imgHover.getAttribute("src")), /* hoverder img */
+						action.getChildNodes().item(0).getNodeValue()
+						)
+				{
+					/* and overriding onClick function */
+					protected void onClick(){			        
+				        try {
+							game.script.eval(this.action);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+				};
+				
+				gui.addGuiObject(b);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void resume() {
@@ -94,12 +165,12 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		/* batch begin for texture rendering */
 		batch.begin();
 		
-		gui.renderAll();
-		
 		batch.getProjectionMatrix().set(camera.combined);
 		
 		/* and finally render everything */
 		scene.renderAll(this);
+		
+		gui.renderAll();
 		onRender();
 		
 		batch.end();

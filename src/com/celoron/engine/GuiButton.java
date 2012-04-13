@@ -8,7 +8,9 @@ public class GuiButton extends GuiObject {
 	private Texture img;
 	private Texture normalImg;
 	private Texture hoverImg;
-	public GuiButton(Game game, Vector2 pos, Texture normalImg, Texture hoverImg) {
+	protected String action;
+	
+	public GuiButton(Game game, Vector2 pos, Texture normalImg, Texture hoverImg, String action) {
 		super(game);
 		
 		setPos(pos);
@@ -17,6 +19,17 @@ public class GuiButton extends GuiObject {
 		this.hoverImg=hoverImg;
 		
 		img=normalImg;
+		
+		this.action=action;
+	}
+	
+	public GuiButton(Game game, Vector2 pos, Texture normalImg, Texture hoverImg) {
+		this(game, pos, normalImg, hoverImg, "");
+	}
+	
+	/* button without hover img */
+	public GuiButton(Game game, Vector2 pos, Texture normalImg) {
+		this(game, pos, normalImg, normalImg);
 	}
 
 	@Override
@@ -27,20 +40,19 @@ public class GuiButton extends GuiObject {
 
 	@Override
 	protected void onHover() {
-		Gdx.app.log("button", "hover");
+		//Gdx.app.log("button", "hover");
 		img=hoverImg;
-		
 	}
 
 	@Override
 	protected void onUnHover() {
-		Gdx.app.log("button", "unHover");
+		//Gdx.app.log("button", "unHover");
 		img=normalImg;
 	}
 
 	@Override
 	protected void onClick() {
-		Gdx.app.log("button", "clicked");
+		
 	}
 
 }
