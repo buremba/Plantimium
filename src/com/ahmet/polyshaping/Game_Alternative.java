@@ -3,7 +3,8 @@ package com.ahmet.polyshaping;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import com.ahmet.b2d.GIcombin;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.InputAdapter;
 import com.ahmet.b2d.Rect;
 import com.ahmet.b2d.Tools;
 import com.badlogic.gdx.Gdx;
@@ -23,7 +24,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Game_Alternative extends ApplicationListener implements InputProcessor, InputAdapter {
+public class Game_Alternative extends InputAdapter implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
 	Mesh2d ak = null;
 	Ellipse e1;
@@ -39,7 +40,7 @@ public class Game_Alternative extends ApplicationListener implements InputProces
 	int activated_vertex = 0;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 5;
-	final private int SMOOTH_SENSIVITY = 10;
+	final private int SMOOTH_SENSIVITY = 7;
 	@Override
 	public void create () {
 
@@ -239,6 +240,41 @@ public class Game_Alternative extends ApplicationListener implements InputProces
 		}
 		touchDown=true;
 		return false;
+	}
+	@Override
+	public boolean keyTyped(char arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean keyUp(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean scrolled(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void resize(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

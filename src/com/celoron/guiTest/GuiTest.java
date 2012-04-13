@@ -41,7 +41,7 @@ public class GuiTest extends Game {
 			}
 		};
 		
-		gui.addGuiObject(b); /* button is ready, lets put into gui */
+		//gui.addGuiObject(b); /* button is ready, lets put into gui */
 	}
 
 	@Override
