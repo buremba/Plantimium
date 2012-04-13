@@ -1,6 +1,10 @@
 package com.ahmet.polyshaping;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.ahmet.b2d.Tools;
 import com.badlogic.gdx.Gdx;
@@ -17,7 +21,8 @@ public class Mesh2d {
 	private Mesh mesh;
 	private Vector2[] polygonVertexList;
 	private Vector2[] triVertexList;
-	private int renderMode=GL10.GL_POINTS;
+	private int glLineWidth = 1;
+	private int renderMode=GL10.GL_LINE_SMOOTH;
 	public float PointSize=1,LineWidth=1;
 	
 	private Vector3 color=new Vector3(255,255,255);
@@ -37,10 +42,19 @@ public class Mesh2d {
 		setVertices(vertexlist);
 		setFill(fill);
 	}
+
+	Mesh2d(Vector2 vertice,Vector2 Pos,Vector3 Color,boolean fill)
+	{
+		pos=Pos;
+		color=Color;
+		Vector2[] vertex = {vertice}; 
+		setVertices(vertex);
+		setFill(fill);
+	}
 	public void setVertices(Vector2[] vertexlist)
 	{
 		polygonVertexList=vertexlist;
-		//triVertexList=Tools.Triangulate(polygonVertexList);		
+		triVertexList=Tools.Triangulate(polygonVertexList);		
 		setRenderMode(renderMode);
 	}
 	public void setFill(boolean fill)
@@ -77,8 +91,11 @@ public class Mesh2d {
 		Gdx.gl10.glPushMatrix();
 		s.end();
 		Gdx.gl10.glPointSize(1);
-		Gdx.gl10.glLineWidth(1);
+		Gdx.gl10.glLineWidth(glLineWidth);
 		
+	}
+	public void setLineWidth(int width) {
+		glLineWidth = width;
 	}
 	public void updateMesh(Vector2[] vertexlist)
 	{
@@ -113,15 +130,23 @@ public class Mesh2d {
 		vertexlist2[polygonVertexList.length]=new Vector2(x-pos.x,y-pos.y);
 		setVertices(vertexlist2);
 	}
-	public void addVertex(float x,float y,Vector2 after)
+	public void getAdded(float x,float y,int order)
 	{
-		Vector2[] vertexlist2=new Vector2[polygonVertexList.length+1];
+		ArrayList<Vector2> temp=new ArrayList<Vector2>();
 		for(int i=0; i<polygonVertexList.length; i++)
 		{
-			vertexlist2[i]=polygonVertexList[i];
+			if(order==i) {
+				temp.add(new Vector2(x-pos.x,y-pos.y));
+			}else
+			if(order<i) {
+				temp.add(polygonVertexList[i]);
+			}else {
+				temp.add(polygonVertexList[i]);
+			}
+			
+			
 		}
-		vertexlist2[polygonVertexList.length]=new Vector2(x-pos.x,y-pos.y);
-		setVertices(vertexlist2);
+		setVertices(temp.toArray(new Vector2[0]));
 	}
 	public void getAdded(float x,float y)
 	{
@@ -153,6 +178,20 @@ public class Mesh2d {
 		}
 		return indis;
 	}
+
+	public TreeMap<Integer,Float> getSortedClosestVertex(float x,float y)
+	{
+		HashMap<Integer,Float> map = new HashMap<Integer,Float>();
+		for(int i=0; i<polygonVertexList.length; i++)
+		{
+			map.put(i,(float) Math.hypot(polygonVertexList[i].x-x, polygonVertexList[i].y-y));
+		}
+		ValueComparator bvc =  new ValueComparator(map);
+		TreeMap<Integer,Float> sorted_map = new TreeMap<Integer, Float>(bvc);
+		sorted_map.putAll(map);
+		
+		return sorted_map;
+	}
 	public Vector2 getVertex(int i)
 	{
 		return polygonVertexList[i];
@@ -166,4 +205,29 @@ public class Mesh2d {
 		pos=Pos;
 	}
 
+	public Vector2 getPosition()
+	{
+		return pos;
+	}
+
+}
+
+
+class ValueComparator implements Comparator {
+
+Map base;
+public ValueComparator(Map base) {
+this.base = base;
+}
+
+public int compare(Object a, Object b) {
+
+if((Float)base.get(a) > (Float)base.get(b)) {
+return 1;
+} else if((Float)base.get(a) == (Float)base.get(b)) {
+return 0;
+} else {
+return -1;
+}
+}
 }
