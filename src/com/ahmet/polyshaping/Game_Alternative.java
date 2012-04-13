@@ -28,19 +28,19 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	private SpriteBatch batch;
 	Mesh2d ak = null;
 	Ellipse e1;
+	Ellipse border;
 	Line l1;
 	Line errline = null;
 	ArrayList<Ellipse> borders = null;
 	boolean first = true;
-	boolean choosed;
+	int choosed = -1;
 	int mode = 0;
 	boolean process = false;
 	boolean touchDown;
 	boolean touchDragged;
-	int activated_vertex = 0;
 	boolean vertexLock=false;
-	final private int CLICK_SENSIVITY = 5;
-	final private int SMOOTH_SENSIVITY = 7;
+	final private int CLICK_SENSIVITY = 25;
+	final private int SMOOTH_SENSIVITY = 10;
 	@Override
 	public void create () {
 
@@ -52,7 +52,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	public void render () {
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//gl.glEnable(GL10.GL_LINEAR);
+		gl.glEnable(GL10.GL_LINEAR);
 		if(ak!=null)
 			ak.Draw(batch);
 		if(e1!=null && mode==2)
@@ -62,10 +62,16 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 				borders.get(i).Draw(batch); 
 			}
 		}
-		if(errline!=null)
+		if(errline!=null && mode==2)
 			errline.Draw(batch);
 			
 	}
+	public void fillallcircle(boolean fill) {
+		for(int i=0; i<borders.size(); i++) {
+			borders.get(i).setFill(fill);
+		}
+	}
+
 	@Override
 	public boolean touchUp (int x, int y, int pointer, int button) {
 		//Gdx.app.log("events", "touchUp");
@@ -78,7 +84,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			borders = new ArrayList<Ellipse>();
 			ArrayList<Vector2> smooth_vertex = new ArrayList<Vector2>();
 			smooth_vertex.add(ak.getVertex(0));
-			Ellipse border = new Ellipse(ak.getVertex(0),new Vector2(5,5),new Vector3(255,120,120),false);
+			border = new Ellipse(ak.getVertex(0),new Vector2(5,5),new Vector3(255,120,120),false);
 			borders.add(border);
 			int passed=0;
 			for(int i=1; i<ak.getVertices().length; i++) {
@@ -99,73 +105,39 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		}else
 		if(!first) {
 			if(mode==2) {
-				for(int i=0; i<borders.size(); i++) {
-					borders.get(i).setFill(false);
-				}
-				TreeMap<Integer,Float> vertexlist  = ak.getSortedClosestVertex(x, Gdx.graphics.getHeight()-y);
-				Vector2[] closests = new Vector2[2];
-				int[] keys = new int[2];
-				int z=0;
-				int order = 0;
-				for (Integer key :vertexlist.keySet()) {
-					if(z>1)
-						break;
-					closests[z] = borders.get(key).getPosition();
-					keys[z] = key;
-					borders.get(key).setFill(true);
-					order = key;
-					Gdx.app.log("vertex", "key/value: " + key + "/"+vertexlist.get(key));
-				    z++;
-				}
-				//closests[1].sub(closests[0]).dot(new Vector2(x,y).sub(v));
-				Vector2 point = new Vector2(x,Gdx.graphics.getHeight()-y);
+				fillallcircle(false);
+				Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
 				
-				Gdx.app.log("point1", "x: "+Double.toString(closests[0].x)+" y:"+Double.toString(closests[0].y)+" key:"+Integer.toString(keys[0]));
-				Gdx.app.log("point2", "x: "+Double.toString(closests[1].x)+" y:"+Double.toString(closests[1].y)+" key:"+Integer.toString(keys[1]));
-				Gdx.app.log("point3", "x: "+Double.toString(point.x)+" y:"+Double.toString(point.y));
+				int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
+				borders.get(keys[0]).setFill(true);
+				borders.get(keys[1]).setFill(true);
 				
-				double xDelta = closests[1].x - closests[0].x;
-				double yDelta = closests[1].y - closests[0].y;
+				Vector2 closest_point = Geometry.calculate_closest_point(ak.getVertex(keys[0]), ak.getVertex(keys[1]), point);
 
-				double something = xDelta*xDelta + yDelta*yDelta;
-
-	    	    double u =  ((point.x - closests[0].x) * xDelta + (point.y - closests[0].y) * yDelta) / something;
-	    	    Gdx.app.log("u", Double.toString(u));
-	    	    if(u > 1) {
-	    	        u = 1;
-	    	    }else
-	    	    if (u < 0) {
-	    	    	u = 0;
-	    	    }
-
-	    	    int pointx = (int) (closests[0].x + u * xDelta);
-	    	    int pointy = (int) (closests[0].y + u * yDelta);
-
-	    	    double dpointx = pointx - point.x;
-	    	    double dpointy = pointy - point.y;
-
-	    	    double distance = Math.sqrt(dpointx*dpointx + dpointy*dpointy);
-	    	    Gdx.app.log("distance", Double.toString(distance));
+	    	    double distance = Math.hypot(closest_point.x-point.x, closest_point.y-point.y);
+	    	    
 	    	    if(distance>CLICK_SENSIVITY) {
-	    	    	errline =new Line(new Vector2(point.x,point.y),new Vector2(pointx,pointy),new Vector3(255, 155,255));
+	    	    	errline =new Line(new Vector2(point.x,point.y),new Vector2(closest_point.x,closest_point.y),new Vector3(0, 34,34));
 	    	    }else {
-	    	    	ak.getAdded(pointx, pointy, order+1);
+	    	    	ak.getAdded(closest_point.x, closest_point.y, keys[1]);
+	    	    	border = new Ellipse(ak.getVertex(keys[1]),new Vector2(5,5),new Vector3(255,120,120),false);
+	    	    	borders = Misc.lineup(borders, keys[1], border);
 	    	    }
 	    	    
 			}else
 			if(mode==1) {
-				activated_vertex=ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y);
-				Vector2 temp=ak.getVertex(activated_vertex);
+				int closest_vertex = ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y);
+				Vector2 temp=ak.getVertex(closest_vertex);
 				if(Math.hypot(temp.x-x, temp.y-Gdx.graphics.getHeight()+y)<CLICK_SENSIVITY) {
-					for(int i=0; i<borders.size(); i++) {
-						borders.get(i).setFill(false);
-					}
-					borders.get(activated_vertex).setFill(true);
-					choosed = true;
+					fillallcircle(false);
+					borders.get(closest_vertex).setFill(true);
+					choosed = closest_vertex;
 				}else
-				if(choosed) {
-					ak.setVertex(activated_vertex, x, Gdx.graphics.getHeight()-y);
-					borders.get(activated_vertex).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
+				if(choosed>-1) {
+					fillallcircle(false);
+					ak.setVertex(choosed, x, Gdx.graphics.getHeight()-y);
+					borders.get(choosed).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
+					borders.get(choosed).setFill(true);
 				}
 			}
 		}
@@ -175,7 +147,27 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	}
 	@Override
 	public boolean touchMoved (int x, int y) {
-		e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
+		if(mode==2) {
+			fillallcircle(false);
+			e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
+			Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
+			
+			int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
+			borders.get(keys[0]).setFill(true);
+			borders.get(keys[1]).setFill(true);
+			
+			Vector2 closest_point = Geometry.calculate_closest_point(ak.getVertex(keys[0]), ak.getVertex(keys[1]), point);
+
+    	    double distance = Math.hypot(closest_point.x-point.x, closest_point.y-point.y);
+    	    
+    	    if(distance>CLICK_SENSIVITY) {
+    	    	errline =new Line(new Vector2(point.x,point.y),new Vector2(closest_point.x,closest_point.y),new Vector3(100, 0,0));
+    	    }else {
+    	    	errline =new Line(new Vector2(point.x,point.y),new Vector2(closest_point.x,closest_point.y),new Vector3(0, 100,0));
+    	    	//ak.getAdded(closest_point.x, closest_point.y, keys[1]);
+    	    }
+    	    
+		}
 		return false;
 	}
 	@Override
@@ -190,19 +182,11 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 				ak.getAdded(x, Gdx.graphics.getHeight()-y);
 			else {
 				if(mode==2) {
-					TreeMap<Integer,Float> vertexlist  = ak.getSortedClosestVertex(x, Gdx.graphics.getHeight()-y);
-					int z=0;
-					for (Integer key :vertexlist.keySet()) {
-						if(z>1)
-							break;
-						borders.get(key).setFill(true);
-						Gdx.app.log("vertex", "key/value: " + key + "/"+vertexlist.get(key));
-					    z++;
-					}
+					//
 				}else
-				if(mode==1 && choosed) {
-					ak.setVertex(activated_vertex, x, Gdx.graphics.getHeight()-y);
-					borders.get(activated_vertex).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
+				if(mode==1 && choosed>-1) {
+					ak.setVertex(choosed, x, Gdx.graphics.getHeight()-y);
+					borders.get(choosed).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
 				}
 			}
 		}		
@@ -222,22 +206,10 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		//Gdx.app.log("events", "touchDown");
 		if(ak==null) {
 			ak=new Mesh2d(new Vector2(x,Gdx.graphics.getHeight()-y),new Vector2(0,0),new Vector3(255,0,0),false);
-			//ak.setRenderMode(GL10.GL_LINE_LOOP);
+			ak.setRenderMode(GL10.GL_LINE_LOOP);
 		}else
 		if(first)
 			ak.getAdded(x, Gdx.graphics.getHeight()-y);
-		else {
-			if(mode==10) {
-				activated_vertex=ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y);
-				for(int i=0; i<borders.size(); i++) {
-					borders.get(i).setFill(false); 
-				}
-				borders.get(activated_vertex).setFill(true);
-			}else
-			if(mode==20) {
-				
-			}
-		}
 		touchDown=true;
 		return false;
 	}

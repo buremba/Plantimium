@@ -178,20 +178,7 @@ public class Mesh2d {
 		}
 		return indis;
 	}
-
-	public TreeMap<Integer,Float> getSortedClosestVertex(float x,float y)
-	{
-		HashMap<Integer,Float> map = new HashMap<Integer,Float>();
-		for(int i=0; i<polygonVertexList.length; i++)
-		{
-			map.put(i,(float) Math.hypot(polygonVertexList[i].x-x, polygonVertexList[i].y-y));
-		}
-		ValueComparator bvc =  new ValueComparator(map);
-		TreeMap<Integer,Float> sorted_map = new TreeMap<Integer, Float>(bvc);
-		sorted_map.putAll(map);
-		
-		return sorted_map;
-	}
+	
 	public Vector2 getVertex(int i)
 	{
 		return polygonVertexList[i];
@@ -210,24 +197,4 @@ public class Mesh2d {
 		return pos;
 	}
 
-}
-
-
-class ValueComparator implements Comparator {
-
-Map base;
-public ValueComparator(Map base) {
-this.base = base;
-}
-
-public int compare(Object a, Object b) {
-
-if((Float)base.get(a) > (Float)base.get(b)) {
-return 1;
-} else if((Float)base.get(a) == (Float)base.get(b)) {
-return 0;
-} else {
-return -1;
-}
-}
 }
