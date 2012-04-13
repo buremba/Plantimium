@@ -124,21 +124,6 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	    	    	borders = Misc.lineup(borders, keys[1], border);
 	    	    }
 	    	    
-			}else
-			if(mode==1) {
-				int closest_vertex = ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y);
-				Vector2 temp=ak.getVertex(closest_vertex);
-				if(Math.hypot(temp.x-x, temp.y-Gdx.graphics.getHeight()+y)<CLICK_SENSIVITY) {
-					fillallcircle(false);
-					borders.get(closest_vertex).setFill(true);
-					choosed = closest_vertex;
-				}else
-				if(choosed>-1) {
-					fillallcircle(false);
-					ak.setVertex(choosed, x, Gdx.graphics.getHeight()-y);
-					borders.get(choosed).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
-					borders.get(choosed).setFill(true);
-				}
 			}
 		}
 		touchDown=false;
@@ -194,11 +179,13 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	}
 	@Override
 	public boolean keyDown (int keycode) {
-		Gdx.app.log("sad", Integer.toString(keycode));
+		fillallcircle(false);
 		if(keycode==9)
 			mode = 2;
-		if(keycode==8)
+		if(keycode==8) {
 			mode = 1;
+			choosed = -1;
+		}
 		return false;
 	}
 	@Override
@@ -210,6 +197,22 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		}else
 		if(first)
 			ak.getAdded(x, Gdx.graphics.getHeight()-y);
+		else
+		if(mode==1) {
+			int closest_vertex = ak.getClosestVertexIndex(x,Gdx.graphics.getHeight()-y);
+			Vector2 temp=ak.getVertex(closest_vertex);
+			if(Math.hypot(temp.x-x, temp.y-Gdx.graphics.getHeight()+y)<CLICK_SENSIVITY) {
+				fillallcircle(false);
+				borders.get(closest_vertex).setFill(true);
+				choosed = closest_vertex;
+			}else
+			if(choosed>-1) {
+				fillallcircle(false);
+				ak.setVertex(choosed, x, Gdx.graphics.getHeight()-y);
+				borders.get(choosed).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
+				borders.get(choosed).setFill(true);
+			}
+		}
 		touchDown=true;
 		return false;
 	}
