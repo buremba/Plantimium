@@ -40,15 +40,17 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY =20;
-	final private int MAX_SMOOTH_SENSIVITY = 30;
+	final private int MIN_SMOOTH_SENSIVITY = 5;
+	final private int MAX_SMOOTH_SENSIVITY = 10;
 	ArrayList<Ellipse> more = null;
+	private int active_more = -1;
 	@Override
 	public void create () {
 
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		e1=new Ellipse(new Vector2(60,60),new Vector2(10,10),new Vector3(155,56,55),false);
+		more = new ArrayList<Ellipse>();
 	}
 	@Override
 	public void render () {
@@ -100,15 +102,12 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 						if(i+1==ak.getVertices().length)
 							i = 0;
 						int dist = (int) Math.hypot(ak.getVertex(i).x-temp.x, ak.getVertex(i).y-temp.y);
-						Gdx.app.log("sýra", Integer.toString(i)+" dist: "+Integer.toString(dist)+" from "+Integer.toString(ak.getVertices().length));
 						if(dist>MAX_SMOOTH_SENSIVITY) {
-							Gdx.app.log("parca", "parçalýyom");
 							for(int z=1; z<dist/MAX_SMOOTH_SENSIVITY; z++) {
 								tempvector = new Vector2(temp.x + (ak.getVertex(i).x-temp.x) *(z / (float) (dist/MAX_SMOOTH_SENSIVITY)), temp.y + (ak.getVertex(i).y-temp.y)*(z / (float) (dist/MAX_SMOOTH_SENSIVITY)));
 								smooth_vertex.add(tempvector);
 								border = new Ellipse(tempvector,new Vector2(5,5),new Vector3(255,120,120),false);
 								borders.add(border);
-								Gdx.app.log("parca", tempvector.toString());
 							}
 						}
 						if(dist>MIN_SMOOTH_SENSIVITY && i>0) {
@@ -136,7 +135,6 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			Vector2[] vArray = new Vector2[smooth_vertex.size()];
 			smooth_vertex.toArray(vArray);
 			ak.setVertices(vArray);
-			Gdx.app.log("total", Integer.toString(vArray.length));
 			process = false;
 		}else
 		if(!first) {
@@ -172,7 +170,6 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			fillallcircle(false);
 			e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
 			Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
-			Gdx.app.log("stat", "--");
 			int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
 			borders.get(keys[0]).setFill(true);
 			borders.get(keys[1]).setFill(true);
@@ -197,13 +194,13 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 				int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
 				
 				Vector2 closest_point = Geometry.calculate_closest_point(ak.getVertex(keys[0]), ak.getVertex(keys[1]), point);
-
-				more = new ArrayList<Ellipse>();
 				
 	    	    //double distance = Math.hypot(closest_point.x-point.x, closest_point.y-point.y);
 	    	    
 	    	    //if(distance>CLICK_SENSIVITY) {
-	    	    	more.add(new Ellipse(new Vector2(closest_point.x,closest_point.y),new Vector2(10,10),new Vector3(0,50,50),true));
+					Gdx.app.log("drag", Integer.toString(active_more));
+					if(active_more!=-1)
+						more.get(active_more).setPosition(new Vector2(closest_point.x,closest_point.y));
 	    	    //}else {
 	    	    	//ak.getAdded(closest_point.x, closest_point.y, keys[1]);
 	    	    //}
@@ -270,6 +267,17 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 				borders.get(choosed).setPosition(new Vector2(x, Gdx.graphics.getHeight()-y));
 				borders.get(choosed).setFill(true);
 			}
+		}else
+		if(mode==3) {
+			fillallcircle(false);
+			e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
+			Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
+			
+			int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
+			
+			Vector2 closest_point = Geometry.calculate_closest_point(ak.getVertex(keys[0]), ak.getVertex(keys[1]), point);
+	    	more.add(new Ellipse(new Vector2(closest_point.x,closest_point.y),new Vector2(10,10),new Vector3(25,10,10),true));
+	    	active_more  = more.size()-1;
 		}
 		touchDown=true;
 		return false;

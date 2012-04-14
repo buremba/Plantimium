@@ -20,7 +20,7 @@ public class Geometry {
 		if(plus==0)
 			u = 2;
 		else
-			u = ((point.x - p1.x) * xDelta + (point.y - p1.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
+			u = ((point.x - p1.x) * xDelta + (point.y - p1.y) * yDelta) / plus;
 		
 		if (u > 1) {
 			u = 1;
