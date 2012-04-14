@@ -40,8 +40,8 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY = 5;
-	final private int MAX_SMOOTH_SENSIVITY = 10;
+	final private int MIN_SMOOTH_SENSIVITY = 15;
+	final private int MAX_SMOOTH_SENSIVITY = 20;
 	ArrayList<Ellipse> more = null;
 	private int active_more = -1;
 	@Override
