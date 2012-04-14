@@ -1,9 +1,11 @@
 package com.ahmet.polyshaping;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.ahmet.b2d.Rect;
 import com.ahmet.b2d.Tools;
@@ -40,10 +42,12 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY = 5;
-	final private int MAX_SMOOTH_SENSIVITY = 10;
+	final private int MIN_SMOOTH_SENSIVITY = 15;
+	final private int MAX_SMOOTH_SENSIVITY = 20;
 	ArrayList<Ellipse> more = null;
 	private int active_more = -1;
+	private OrthographicCamera cam;
+	private Rectangle glViewport;
 	@Override
 	public void create () {
 
@@ -51,12 +55,22 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		Gdx.input.setInputProcessor(this);
 		e1=new Ellipse(new Vector2(60,60),new Vector2(10,10),new Vector3(155,56,55),false);
 		more = new ArrayList<Ellipse>();
+		
+		cam = new OrthographicCamera(600, 400);
+		cam.position.set(300, 200, 0);
+		glViewport = new Rectangle(0, 0, 600, 400);
 	}
 	@Override
 	public void render () {
 		GL10 gl = Gdx.graphics.getGL10();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		gl.glEnable(GL10.GL_LINEAR);
+		
+		gl.glViewport((int) glViewport.x, (int) glViewport.y, (int) glViewport.width, (int) glViewport.height);
+ 
+		cam.update();
+		cam.apply(gl);
+		
 		if(ak!=null)
 			ak.Draw(batch);
 		if(e1!=null && mode==2)
@@ -198,7 +212,6 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	    	    //double distance = Math.hypot(closest_point.x-point.x, closest_point.y-point.y);
 	    	    
 	    	    //if(distance>CLICK_SENSIVITY) {
-					Gdx.app.log("drag", Integer.toString(active_more));
 					if(active_more!=-1)
 						more.get(active_more).setPosition(new Vector2(closest_point.x,closest_point.y));
 	    	    //}else {
@@ -233,6 +246,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	@Override
 	public boolean keyDown (int keycode) {
 		fillallcircle(false);
+		//Gdx.app.log("keyDown", Integer.toString(keycode));
 		if(keycode==9)
 			mode = 2;
 		if(keycode==10)
@@ -240,7 +254,24 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		if(keycode==8) {
 			mode = 1;
 			choosed = -1;
+		}else
+		if(keycode==81) {
+			 cam.zoom += 0.02;
+			 Gdx.app.log("a", Float.toString(cam.zoom));
+		}else
+		if(keycode==69) {
+			cam.zoom -= 0.02;
+			Gdx.app.log("a", Float.toString(cam.zoom));
+		}else
+		if(keycode==Input.Keys.LEFT) {
+			if (cam.position.x > 0)
+                cam.translate(-3, 0, 0);
+		}else
+		if(keycode==Input.Keys.RIGHT) {
+			if (cam.position.x < 600)
+				cam.translate(3, 0, 0);
 		}
+			
 		return false;
 	}
 	@Override
