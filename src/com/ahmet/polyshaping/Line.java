@@ -29,4 +29,13 @@ public class Line extends Mesh2d {
 				new Vector2(a1.x,a1.y),
 				new Vector2(a2.x,a2.y)});
 	}
+
+	public Vector2 getPos1()
+	{
+		return a1;
+	}
+	public Vector2 getPos2()
+	{
+		return a2;
+	}
 }
