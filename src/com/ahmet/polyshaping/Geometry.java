@@ -14,8 +14,14 @@ public class Geometry {
 		double xDelta = p2.x - p1.x;
 		double yDelta = p2.y - p1.y;
 
-		double u = ((point.x - p1.x) * xDelta + (point.y - p1.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
-		 Gdx.app.log("u", Double.toString(u));
+		double plus = (xDelta * xDelta + yDelta * yDelta);
+		double u;
+		
+		if(plus==0)
+			u = 2;
+		else
+			u = ((point.x - p1.x) * xDelta + (point.y - p1.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
+		
 		if (u > 1) {
 			u = 1;
 		} else if (u < 0) {
@@ -39,8 +45,6 @@ public class Geometry {
 			u = 2;
 		else
 			u = ((point.x - p1.x) * xDelta + (point.y - p1.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
-		
-		//Gdx.app.log("is_orthogonal", Double.toString((xDelta * xDelta + yDelta * yDelta)));
 		
 		return (u > 1 || u < 0);
 	}
