@@ -40,7 +40,9 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int SMOOTH_SENSIVITY = 10;
+	final private int MIN_SMOOTH_SENSIVITY =20;
+	final private int MAX_SMOOTH_SENSIVITY = 30;
+	ArrayList<Ellipse> more = null;
 	@Override
 	public void create () {
 
@@ -57,9 +59,14 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			ak.Draw(batch);
 		if(e1!=null && mode==2)
 			e1.Draw(batch);
-		if(borders!=null) {
+		if(borders!=null && mode!=3) {
 			for(int i=0; i<borders.size(); i++) {
 				borders.get(i).Draw(batch); 
+			}
+		}
+		if(more!=null && mode == 3) {
+			for(int i=0; i<more.size(); i++) {
+				more.get(i).Draw(batch); 
 			}
 		}
 		if(errline!=null && mode==2)
@@ -86,21 +93,50 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			smooth_vertex.add(ak.getVertex(0));
 			border = new Ellipse(ak.getVertex(0),new Vector2(5,5),new Vector3(255,120,120),false);
 			borders.add(border);
-			int passed=0;
-			for(int i=1; i<ak.getVertices().length; i++) {
-				int dist = (int) Math.hypot(ak.getVertex(i).x-ak.getVertex(i-1).x , ak.getVertex(i).y-ak.getVertex(i-1).y);
-				if(dist>SMOOTH_SENSIVITY || passed>SMOOTH_SENSIVITY || i==ak.getVertices().length) {
-					passed = 0;
+			Vector2 temp = null;
+			Vector2 tempvector =null;
+			for(int i=0; i<ak.getVertices().length; i++) {
+				if(temp != null) {
+						if(i+1==ak.getVertices().length)
+							i = 0;
+						int dist = (int) Math.hypot(ak.getVertex(i).x-temp.x, ak.getVertex(i).y-temp.y);
+						Gdx.app.log("sýra", Integer.toString(i)+" dist: "+Integer.toString(dist)+" from "+Integer.toString(ak.getVertices().length));
+						if(dist>MAX_SMOOTH_SENSIVITY) {
+							Gdx.app.log("parca", "parçalýyom");
+							for(int z=1; z<dist/MAX_SMOOTH_SENSIVITY; z++) {
+								tempvector = new Vector2(temp.x + (ak.getVertex(i).x-temp.x) *(z / (float) (dist/MAX_SMOOTH_SENSIVITY)), temp.y + (ak.getVertex(i).y-temp.y)*(z / (float) (dist/MAX_SMOOTH_SENSIVITY)));
+								smooth_vertex.add(tempvector);
+								border = new Ellipse(tempvector,new Vector2(5,5),new Vector3(255,120,120),false);
+								borders.add(border);
+								Gdx.app.log("parca", tempvector.toString());
+							}
+						}
+						if(dist>MIN_SMOOTH_SENSIVITY && i>0) {
+							Vector2 lastvector;
+							if(tempvector!=null) 
+								lastvector = tempvector;
+							else
+								lastvector = ak.getVertex(i);
+							smooth_vertex.add(lastvector);
+							border = new Ellipse(lastvector,new Vector2(5,5),new Vector3(255,120,120),false);
+							borders.add(border);
+							temp = lastvector;
+						}
+						if (i==0)
+							break;
+				}
+				else {
 					smooth_vertex.add(ak.getVertex(i));
 					border = new Ellipse(ak.getVertex(i),new Vector2(5,5),new Vector3(255,120,120),false);
 					borders.add(border);
-				}else {
-					passed++;
+					temp = ak.getVertex(i);
 				}
+				tempvector = null;
 			}
 			Vector2[] vArray = new Vector2[smooth_vertex.size()];
 			smooth_vertex.toArray(vArray);
 			ak.setVertices(vArray);
+			Gdx.app.log("total", Integer.toString(vArray.length));
 			process = false;
 		}else
 		if(!first) {
@@ -136,7 +172,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			fillallcircle(false);
 			e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
 			Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
-			
+			Gdx.app.log("stat", "--");
 			int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
 			borders.get(keys[0]).setFill(true);
 			borders.get(keys[1]).setFill(true);
@@ -152,7 +188,27 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
     	    	//ak.getAdded(closest_point.x, closest_point.y, keys[1]);
     	    }
     	    
-		}
+		}else
+		if(mode==3) {
+				fillallcircle(false);
+				e1.setPosition(new Vector2(x,Gdx.graphics.getHeight()-y));
+				Vector2 point =  new Vector2(x,Gdx.graphics.getHeight()-y);
+				
+				int[] keys = Geometry.find_closest_point_in_vertex(ak.getVertices(), point);
+				
+				Vector2 closest_point = Geometry.calculate_closest_point(ak.getVertex(keys[0]), ak.getVertex(keys[1]), point);
+
+				more = new ArrayList<Ellipse>();
+				
+	    	    //double distance = Math.hypot(closest_point.x-point.x, closest_point.y-point.y);
+	    	    
+	    	    //if(distance>CLICK_SENSIVITY) {
+	    	    	more.add(new Ellipse(new Vector2(closest_point.x,closest_point.y),new Vector2(10,10),new Vector3(0,50,50),true));
+	    	    //}else {
+	    	    	//ak.getAdded(closest_point.x, closest_point.y, keys[1]);
+	    	    //}
+	    	    
+			}
 		return false;
 	}
 	@Override
@@ -182,6 +238,8 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		fillallcircle(false);
 		if(keycode==9)
 			mode = 2;
+		if(keycode==10)
+			mode = 3;
 		if(keycode==8) {
 			mode = 1;
 			choosed = -1;
