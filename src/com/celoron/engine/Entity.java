@@ -1,6 +1,7 @@
 package com.celoron.engine;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -15,16 +16,16 @@ public class Entity {
 	boolean visible=true;
 	RenderComponent renderComponent;
 
-	LinkedList<Component> components;
-	LinkedList<Component> componentsToRemove;
+	List<Component> components;
+	List<Component> componentsToRemove;
 
 	public Game game;
 
 	public Entity(String id, Game game) {
 		this.id = id;
 
-		components = new LinkedList<Component>();
-		componentsToRemove = new LinkedList<Component>();
+		components = new ArrayList<Component>();
+		componentsToRemove = new ArrayList<Component>();
 
 		position = new Vector2(0, 0);
 		scale = 1;
@@ -76,7 +77,7 @@ public class Entity {
 	}
 
 	public void setPosition(Vector2 position) {
-		this.position = position;
+		this.position.set(position.x, position.y);
 	}
 
 	public void setRotation(float rotate) {

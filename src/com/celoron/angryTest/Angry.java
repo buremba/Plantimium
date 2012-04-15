@@ -1,17 +1,34 @@
-package com.celoron.test;
+package com.celoron.angryTest;
 
 import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.backends.jogl.JoglApplication;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.celoron.engine.Entity;
 import com.celoron.engine.Game;
+import com.celoron.test.PhysicComp;
+import com.celoron.test.RectRender;
+import com.celoron.test.TextureRender;
 
-public class MyGame extends Game {
-	Entity player;
+public class Angry extends Game {
+	Entity sapan;
 	@Override
 	public void onCreate() {
+		sapan= new Entity("spaan", this);
+		sapan.setPosition(new Vector2(-200, 0));
+		sapan.AddComponent(new TextureRender("render", asset.getTexture("data/city.png")));
+		sapan.AddComponent(new Sapan("sapan"));
+		
+		scene.addEntity(sapan);
+		
+		createPlanes();
+	}
+
+	@Override
+	public void onUpdate() {
+
+	}
+	
+	public void createPlanes(){
 		Entity e;
 		
 		e = new Entity("plane", this);
@@ -39,32 +56,6 @@ public class MyGame extends Game {
 		e.AddComponent(new PhysicComp("phy", new Vector2(Gdx.graphics.getWidth(),1), BodyType.StaticBody));
 		e.AddComponent(new RectRender("render", new Vector2(Gdx.graphics.getWidth(),1)));
 		scene.addEntity(e);
-		
-		Entity e2= new Entity("cliker", this);
-		e2.AddComponent(new CreatorComp("create"));
-		
-		scene.addEntity(e2);
-		
-		player= new Entity("player",this);
-		player.setPosition(new Vector2(0,0));
-		player.AddComponent(new PhysicComp("phy", new Vector2(32,32), BodyType.DynamicBody));
-		player.AddComponent(new PlayerControl("controller", 100));
-		player.AddComponent(new BulletFirer("firer"));
-		player.AddComponent( new TextureRender("render", new Texture(Gdx.files.internal("data/badlogicsmall.jpg"))));
-		
-		scene.addEntity(player);
 	}
 
-	@Override
-	public void onUpdate() {
-		/*
-		 * There is nothing i have to think. after all components doing all work
-		 * :D
-		 */
-		
-		Gdx.app.log("getAccelerometerX", ""+Gdx.input.getAccelerometerX() );
-		Gdx.app.log("getAccelerometerY", ""+Gdx.input.getAccelerometerY() );
-		//Gdx.app.log("getAccelerometerZ", ""+Gdx.input.getAccelerometerZ() );
-		world.setGravity(new Vector2( (float)Gdx.input.getAccelerometerX()*100, (float)Gdx.input.getAccelerometerY()*100  ));
-	}
 }

@@ -1,7 +1,6 @@
 package com.celoron.test2;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.jogl.JoglApplication;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.celoron.engine.Entity;
@@ -131,9 +130,5 @@ public class TestGame extends Game {
 		
 		firstCity.refreshText();
 		secondCity.refreshText();
-	}
-
-	public static void main(String[] args) {
-		new JoglApplication(new TestGame(), "Test Game", 800, 600, false);
 	}
 }

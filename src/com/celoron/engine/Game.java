@@ -2,8 +2,8 @@ package com.celoron.engine;
 
 import java.io.File;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+//import javax.script.ScriptEngine;
+//import javax.script.ScriptEngineManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -44,7 +44,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	public BitmapFont font;
 	
 	/* scripting */
-    ScriptEngine script;
+    //ScriptEngine script;
 
 	public boolean needsGL20() {
 		return false;
@@ -67,7 +67,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		gl = Gdx.graphics.getGL10();
 
 		/* create physic world */
-		world = new World(new Vector2(0, -50), true);
+		world = new World(new Vector2(0, -10), true);
 
 		lastFrameTime = System.nanoTime();
 		
@@ -76,9 +76,9 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 
-		ScriptEngineManager manager = new ScriptEngineManager();
+		/*ScriptEngineManager manager = new ScriptEngineManager();
 	    script = manager.getEngineByName("JavaScript");
-	    script.put("game", this);
+	    script.put("game", this);*/
 		
 		/* this actually call game logic creating, not game engine */
 		onCreate();
@@ -96,7 +96,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 			
 			NodeList scripts = doc.getElementsByTagName("script");
 			for (int i = 0; i < scripts.getLength(); i++){
-				script.eval(scripts.item(i).getChildNodes().item(0).getNodeValue());
+				//script.eval(scripts.item(i).getChildNodes().item(0).getNodeValue());
 			}
 
 			NodeList buttons = doc.getElementsByTagName("button");
@@ -121,7 +121,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 					/* and overriding onClick function */
 					protected void onClick(){			        
 				        try {
-							game.script.eval(this.action);
+							//game.script.eval(this.action);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
@@ -150,7 +150,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		 * 2.update all entity, and its components
 		 * 3.update game logic (class that extends from Game)
 		 * */
-		world.step(deltaTime, 8, 3);
+		world.step(deltaTime ,8,10);
 		scene.updateAll(this);
 		onUpdate();
 
