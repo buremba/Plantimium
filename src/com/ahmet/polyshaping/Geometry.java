@@ -64,8 +64,7 @@ public class Geometry {
 			if (Math.abs(key - order) == 1
 					|| Math.abs(key - order) == sorted_list.size() - 1
 					|| order == -1) {
-				// Gdx.app.log("vertex", "key/value: " + key +
-				// "/"+sorted_distance.get(key));
+				// Gdx.app.log("vertex", "key/value: " + key + "/"+sorted_distance.get(key));
 				if (order != -1
 						&& Geometry.is_orthogonal(vertex[key], vertex[order],
 								point)) {
@@ -106,11 +105,11 @@ public class Geometry {
 	}
 }
 
-class ValueComparator implements Comparator {
+class ValueComparator implements Comparator<Object> {
 
-	Map base;
+	Map<Integer, Float> base;
 
-	public ValueComparator(Map base) {
+	public ValueComparator(Map<Integer, Float> base) {
 		this.base = base;
 	}
 
