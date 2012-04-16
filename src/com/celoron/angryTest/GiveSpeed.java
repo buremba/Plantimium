@@ -8,8 +8,7 @@ import com.celoron.test.PhysicComp;
 /* give linear speed to entitys physics component after create */
 public class GiveSpeed extends Component {
 	Vector2 speed;
-	public GiveSpeed(String id, Vector2 speed) {
-		super(id);
+	public GiveSpeed(Vector2 speed) {
 		this.speed=speed;
 	}
 

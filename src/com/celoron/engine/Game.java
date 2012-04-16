@@ -51,8 +51,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	}
 
 	public void create() {
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(0, 0, 0);
 		batch = new SpriteBatch();
 
@@ -89,7 +88,6 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
-			
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
@@ -137,14 +135,14 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	}
 
 	public void resume() {
-
+		
 	}
 
 	public void render() {
 		/* calculation of fdt */
 		deltaTime = (System.nanoTime() - lastFrameTime) / 1000000000.0f;
 		lastFrameTime = System.nanoTime();
-
+		
 		/*
 		 * 1.update physic 
 		 * 2.update all entity, and its components
@@ -153,7 +151,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		world.step(deltaTime ,8,10);
 		scene.updateAll(this);
 		onUpdate();
-
+		
 		/* clear screen */
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -177,7 +175,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	}
 
 	public void resize(int width, int height) {
-
+		
 	}
 
 	public void pause() {

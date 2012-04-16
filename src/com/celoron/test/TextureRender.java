@@ -7,8 +7,8 @@ import com.celoron.engine.RenderComponent;
 public class TextureRender extends RenderComponent {
 	private Texture texture;
 
-	public TextureRender(String id, Texture texture) {
-		super(id);
+	public TextureRender(Texture texture) {
+		super();
 
 		this.texture = texture;
 	}

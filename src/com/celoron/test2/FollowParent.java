@@ -8,7 +8,7 @@ public class FollowParent extends Component {
 	private Entity parent;
 	private Vector2 pos;
 	public FollowParent(String id, Entity parent, Vector2 pos) {
-		super(id);
+		super();
 		
 		this.parent=parent;
 		this.pos=pos;

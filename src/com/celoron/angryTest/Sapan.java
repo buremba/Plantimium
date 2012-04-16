@@ -1,6 +1,5 @@
 package com.celoron.angryTest;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -11,9 +10,6 @@ import com.celoron.test.TextureRender;
 
 public class Sapan extends Component implements InputProcessor {
 	private boolean drag=false;
-	public Sapan(String id) {
-		super(id);
-	}
 
 	@Override
 	public void update() {
@@ -31,16 +27,15 @@ public class Sapan extends Component implements InputProcessor {
 	}
 	
 	public void throwBox(Vector2 speed){
-		Entity e = new Entity("falling box", game);
+		Entity e = new Entity(game);
 		
 		e.setScale(0.15f);
 		e.setPosition(owner.getPosition());
 		e.setRotation(speed.angle());
-		Gdx.app.log("angle", ""+e.getRotation());
 		
-		e.AddComponent(new TextureRender("render", game.asset.getTexture("data/box.jpg")));
-		e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(0.15f), BodyType.DynamicBody));
-		e.AddComponent(new GiveSpeed("speed", speed));
+		e.addComponent(new TextureRender(game.asset.getTexture("data/box.jpg")));
+		e.addComponent(new PhysicComp(new Vector2(256, 256).mul(0.15f), BodyType.DynamicBody));
+		e.addComponent(new GiveSpeed(speed));
 		
 		game.scene.addEntity(e);
 	}
@@ -74,7 +69,6 @@ public class Sapan extends Component implements InputProcessor {
 		Vector2 pos= game.convertMousePos(new Vector2(x,y));
 		
 		if(pos.dst(owner.getPosition()) < 48){
-			Gdx.app.log("sapan", "clicked");
 			drag=true;
 		}
 		
@@ -98,7 +92,6 @@ public class Sapan extends Component implements InputProcessor {
 		if(drag){
 			Vector2 pos= game.convertMousePos(new Vector2(x,y));
 			drag=false;
-			Gdx.app.log("sapan", "dragged: "+pos.dst(owner.getPosition()));
 			throwBox(owner.getPosition().cpy().sub(pos).mul(0.1f));
 			
 		}

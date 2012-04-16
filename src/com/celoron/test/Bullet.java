@@ -7,9 +7,7 @@ public class Bullet extends Component {
 	private Vector2 speed;
 	private float life;
 
-	public Bullet(String id, Vector2 speed, float life) {
-		super(id);
-
+	public Bullet(Vector2 speed, float life) {
 		this.speed = speed;
 		this.life = life;
 	}

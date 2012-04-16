@@ -20,8 +20,8 @@ public class PhysicComp extends Component {
 	
 	public static final float BOX2D_SCALE=30.0f; /* pixel per meter. exmpl: 30 pixel=1 meter */
 	
-	public PhysicComp(String id, Vector2 dim, BodyType btype) {
-		super(id);
+	public PhysicComp(Vector2 dim, BodyType btype) {
+		super();
 		
 		this.btype=btype;
 		shape = new PolygonShape();

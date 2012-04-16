@@ -7,7 +7,7 @@ public class TextRender extends RenderComponent {
 	private String str;
 	private Color color;
 	public TextRender(String id, String str, Color color) {
-		super(id);
+		super();
 		
 		setColor(color);
 		setText(str);

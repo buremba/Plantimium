@@ -7,23 +7,22 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
 public class Entity {
-	String id;
-
+	/* transform */
 	Vector2 position;
 	float scale;
 	float rotation;
 
+	/* visible staff */
 	boolean visible=true;
 	RenderComponent renderComponent;
 
 	List<Component> components;
 	List<Component> componentsToRemove;
 
+	/* reference to game, so we can use scene,input,asset.. */
 	public Game game;
 
-	public Entity(String id, Game game) {
-		this.id = id;
-
+	public Entity(Game game) {
 		components = new ArrayList<Component>();
 		componentsToRemove = new ArrayList<Component>();
 
@@ -34,7 +33,7 @@ public class Entity {
 		this.game = game;
 	}
 
-	public void AddComponent(Component component) {
+	public void addComponent(Component component) {
 		if (RenderComponent.class.isInstance(component))
 			renderComponent = (RenderComponent) component;
 		
@@ -47,6 +46,13 @@ public class Entity {
 		components.add(component);
 	}
 
+	/*
+	 * example of usage:
+		PhysicComp physic= (PhysicComp) owner.getComponent(PhysicComp.class);
+		if(physic != null){
+			physic.body.setLinearVelocity(new Vector2(10,0));
+		}
+	 */
 	public Component getComponent(Class<?> c) {
 		for (Component comp : components) {
 			if ( c.isInstance(comp))
@@ -71,11 +77,7 @@ public class Entity {
 	public float getRotation() {
 		return rotation;
 	}
-
-	public String getId() {
-		return id;
-	}
-
+	
 	public void setPosition(Vector2 position) {
 		this.position.set(position.x, position.y);
 	}

@@ -14,9 +14,7 @@ public class CreatorComp extends Component {
 	Random generator;
 	
 	static Texture t; /* temporarly */
-	public CreatorComp(String id) {
-		super(id);
-		
+	public CreatorComp() {
 		timeToCreate=0;
 		generator = new Random();
 		
@@ -33,7 +31,7 @@ public class CreatorComp extends Component {
 	public void create() {
 		float scale= (float) (generator.nextDouble()+1)/10;
 		
-		Entity e = new Entity("falling box", game);
+		Entity e = new Entity(game);
 		
 		e.setScale(scale);
 		
@@ -42,8 +40,8 @@ public class CreatorComp extends Component {
 		e.getPosition().x = -Gdx.graphics.getWidth()/4+generator.nextInt(Gdx.graphics.getWidth()/2);
 		e.getPosition().y = Gdx.graphics.getHeight()/4;
 		
-		e.AddComponent(new TextureRender("render", t));
-		e.AddComponent(new PhysicComp("phy", new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
+		e.addComponent(new TextureRender(t));
+		e.addComponent(new PhysicComp(new Vector2(256, 256).mul(scale), BodyType.DynamicBody));
 		
 		//e.AddComponent(new RectRender("render", new Vector2(256, 256).mul(scale)));
 		

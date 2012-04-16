@@ -18,21 +18,19 @@ public class City extends Component implements InputProcessor {
 	
 	private Player player;
 	
-	public City(String id, TestGame game, Player player){
-		super(id);
-		
+	public City(TestGame game, Player player){	
 		this.testGame=game;
 		
-		city=new Entity("City",game);
+		city=new Entity(game);
 		city.setPosition(new Vector2(0,0));
-		city.AddComponent(new TextureRender("render", game.asset.getTexture("data/city.png")));
+		city.addComponent(new TextureRender(game.asset.getTexture("data/city.png")));
 		
 		game.scene.addEntity(city);
 		
-		Entity textEntity=new Entity("text",game);
+		Entity textEntity=new Entity(game);
 		text=new TextRender("render", "0", new Color(0,0,1,1) );
-		textEntity.AddComponent(text);
-		textEntity.AddComponent(new FollowParent("follow", city, new Vector2(-15,15)));
+		textEntity.addComponent(text);
+		textEntity.addComponent(new FollowParent("follow", city, new Vector2(-15,15)));
 		
 		game.scene.addEntity(textEntity);
 		
@@ -143,10 +141,10 @@ public class City extends Component implements InputProcessor {
 	}
 	
 	public void select(){
-		city.AddComponent(new TextureRender("render", game.asset.getTexture("data/citySelected.png")));
+		city.addComponent(new TextureRender(game.asset.getTexture("data/citySelected.png")));
 	}
 	
 	public void release(){
-		city.AddComponent(new TextureRender("render", game.asset.getTexture("data/city.png")));
+		city.addComponent(new TextureRender(game.asset.getTexture("data/city.png")));
 	}
 }

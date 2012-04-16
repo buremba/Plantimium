@@ -15,7 +15,7 @@ public class Line extends RenderComponent {
 	Vector2 dim; /* second point position */
 	
 	public Line(String id, Vector2 dim, float width) {
-		super(id);
+		super();
 		this.width=width;
 		this.dim=dim;
 	}

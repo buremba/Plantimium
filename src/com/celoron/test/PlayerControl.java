@@ -8,9 +8,7 @@ import com.celoron.engine.Component;
 public class PlayerControl extends Component {
 	private float speed;
 
-	public PlayerControl(String id, float speed) {
-		super(id);
-
+	public PlayerControl(float speed) {
 		this.speed = speed;
 	}
 

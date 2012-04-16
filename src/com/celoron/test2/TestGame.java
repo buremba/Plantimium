@@ -22,26 +22,26 @@ public class TestGame extends Game {
 		player= new Player("Player", new Color(0,0,1,1));
 		ai= new Player("AI", new Color(1,0,0,1));
 		
-		Entity city=new Entity("City A",this);
+		Entity city=new Entity(this);
 		city.setPosition(new Vector2(0,0));
-		city.AddComponent(new City("City A", this, player));
+		city.addComponent(new City(this, player));
 		
 		scene.addEntity(city);
 		
-		city=new Entity("City A",this);
+		city=new Entity(this);
 		city.setPosition(new Vector2(200,0));
-		city.AddComponent(new City("City A", this, player));
+		city.addComponent(new City(this, player));
 		
 		scene.addEntity(city);
 		
-		city=new Entity("City B",this);
+		city=new Entity(this);
 		city.setPosition(new Vector2(300,100));
-		city.AddComponent(new City("City B", this, ai));
+		city.addComponent(new City(this, ai));
 		
 		scene.addEntity(city);
 		
-		line= new Entity("line",this);
-		line.AddComponent(new Line("line", new Vector2(100,100), 2));
+		line= new Entity(this);
+		line.addComponent(new Line("line", new Vector2(100,100), 2));
 		scene.addEntity(line);
 		
 		line.setVisible(false);

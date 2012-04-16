@@ -12,8 +12,8 @@ import com.celoron.engine.RenderComponent;
 public class RectRender extends RenderComponent {
 	Mesh mesh;
 
-	public RectRender(String id, Vector2 dim) {
-		super(id);
+	public RectRender(Vector2 dim) {
+		super();
 
 		mesh = new Mesh(true, 4, 4, new VertexAttribute(Usage.Position, 3,"a_position"), 
 				new VertexAttribute(Usage.ColorPacked, 4, "a_color") );

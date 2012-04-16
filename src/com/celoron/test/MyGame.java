@@ -14,43 +14,43 @@ public class MyGame extends Game {
 	public void onCreate() {
 		Entity e;
 		
-		e = new Entity("plane", this);
+		e = new Entity(this);
 		e.setPosition(new Vector2(0,-Gdx.graphics.getHeight()/2));
-		e.AddComponent(new PhysicComp("phy", new Vector2(Gdx.graphics.getWidth(),1), BodyType.StaticBody));
-		e.AddComponent(new RectRender("render", new Vector2(Gdx.graphics.getWidth(),1)));
+		e.addComponent(new PhysicComp(new Vector2(Gdx.graphics.getWidth(),1), BodyType.StaticBody));
+		e.addComponent(new RectRender(new Vector2(Gdx.graphics.getWidth(),1)));
 		scene.addEntity(e);
 		
 		/* SECOND */
-		e = new Entity("plane", this);
+		e = new Entity(this);
 		e.setPosition(new Vector2(Gdx.graphics.getWidth()/2,0));
-		e.AddComponent(new PhysicComp("phy", new Vector2(1,Gdx.graphics.getHeight()), BodyType.StaticBody));
-		e.AddComponent(new RectRender("render", new Vector2(1,Gdx.graphics.getHeight())));
+		e.addComponent(new PhysicComp(new Vector2(1,Gdx.graphics.getHeight()), BodyType.StaticBody));
+		e.addComponent(new RectRender(new Vector2(1,Gdx.graphics.getHeight())));
 		scene.addEntity(e);
 		
 		/* SECOND */
-		e = new Entity("plane", this);
+		e = new Entity(this);
 		e.setPosition(new Vector2(-Gdx.graphics.getWidth()/2,0));
-		e.AddComponent(new PhysicComp("phy", new Vector2(1,Gdx.graphics.getHeight()), BodyType.StaticBody));
-		e.AddComponent(new RectRender("render", new Vector2(1,Gdx.graphics.getHeight())));
+		e.addComponent(new PhysicComp(new Vector2(1,Gdx.graphics.getHeight()), BodyType.StaticBody));
+		e.addComponent(new RectRender(new Vector2(1,Gdx.graphics.getHeight())));
 		scene.addEntity(e);
 		
-		e = new Entity("plane", this);
+		e = new Entity(this);
 		e.setPosition(new Vector2(0,Gdx.graphics.getHeight()/2));
-		e.AddComponent(new PhysicComp("phy", new Vector2(Gdx.graphics.getWidth(),1), BodyType.StaticBody));
-		e.AddComponent(new RectRender("render", new Vector2(Gdx.graphics.getWidth(),1)));
+		e.addComponent(new PhysicComp(new Vector2(Gdx.graphics.getWidth(),1), BodyType.StaticBody));
+		e.addComponent(new RectRender(new Vector2(Gdx.graphics.getWidth(),1)));
 		scene.addEntity(e);
 		
-		Entity e2= new Entity("cliker", this);
-		e2.AddComponent(new CreatorComp("create"));
+		Entity e2= new Entity(this);
+		e2.addComponent(new CreatorComp());
 		
 		scene.addEntity(e2);
 		
-		player= new Entity("player",this);
+		player= new Entity(this);
 		player.setPosition(new Vector2(0,0));
-		player.AddComponent(new PhysicComp("phy", new Vector2(32,32), BodyType.DynamicBody));
-		player.AddComponent(new PlayerControl("controller", 100));
-		player.AddComponent(new BulletFirer("firer"));
-		player.AddComponent( new TextureRender("render", new Texture(Gdx.files.internal("data/badlogicsmall.jpg"))));
+		player.addComponent(new PhysicComp(new Vector2(32,32), BodyType.DynamicBody));
+		player.addComponent(new PlayerControl(100));
+		player.addComponent(new BulletFirer());
+		player.addComponent( new TextureRender(new Texture(Gdx.files.internal("data/badlogicsmall.jpg"))));
 		
 		scene.addEntity(player);
 	}
