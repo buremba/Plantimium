@@ -67,9 +67,10 @@ public class Mesh2d {
 	}
 
 	public void setFill(boolean fill) {
-		if (fill) {
+		if (fill && renderMode!=GL10.GL_TRIANGLES) {
 			setRenderMode(GL10.GL_TRIANGLES);
-		} else {
+		} else
+		if(renderMode!=GL10.GL_LINE_LOOP){
 			setRenderMode(GL10.GL_LINE_LOOP);
 		}
 	}

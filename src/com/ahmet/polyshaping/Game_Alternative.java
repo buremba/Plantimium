@@ -30,8 +30,8 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY = 15;
-	final private int MAX_SMOOTH_SENSIVITY = 20;
+	final private int MIN_SMOOTH_SENSIVITY = 3;
+	final private int MAX_SMOOTH_SENSIVITY = 5;
 	ArrayList<Ellipse> more = null;
 	private int active_more = -1;
 	private OrthographicCamera cam;
@@ -103,7 +103,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			borders = new ArrayList<Ellipse>();
 			ArrayList<Vector2> smooth_vertex = new ArrayList<Vector2>();
 			smooth_vertex.add(ak.getVertex(0));
-			border = new Ellipse(ak.getVertex(0),new Vector2(5,5),new Vector3(255,120,120),false);
+			border = new Ellipse(ak.getVertex(0),new Vector2(2,2),new Vector3(255,120,120),false);
 			borders.add(border);
 			Vector2 temp = null;
 			Vector2 tempvector =null;
@@ -116,7 +116,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 							for(int z=1; z<dist/MAX_SMOOTH_SENSIVITY; z++) {
 								tempvector = new Vector2(temp.x + (ak.getVertex(i).x-temp.x) *(z / (float) (dist/MAX_SMOOTH_SENSIVITY)), temp.y + (ak.getVertex(i).y-temp.y)*(z / (float) (dist/MAX_SMOOTH_SENSIVITY)));
 								smooth_vertex.add(tempvector);
-								border = new Ellipse(tempvector,new Vector2(5,5),new Vector3(255,120,120),false);
+								border = new Ellipse(tempvector,new Vector2(2,2),new Vector3(255,120,120),false);
 								borders.add(border);
 							}
 						}
@@ -127,7 +127,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 							else
 								lastvector = ak.getVertex(i);
 							smooth_vertex.add(lastvector);
-							border = new Ellipse(lastvector,new Vector2(5,5),new Vector3(255,120,120),false);
+							border = new Ellipse(lastvector,new Vector2(2,2),new Vector3(255,120,120),false);
 							borders.add(border);
 							temp = lastvector;
 						}
@@ -136,7 +136,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 				}
 				else {
 					smooth_vertex.add(ak.getVertex(i));
-					border = new Ellipse(ak.getVertex(i),new Vector2(5,5),new Vector3(255,120,120),false);
+					border = new Ellipse(ak.getVertex(i),new Vector2(2,2),new Vector3(255,120,120),false);
 					borders.add(border);
 					temp = ak.getVertex(i);
 				}
@@ -239,8 +239,23 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 					//
 				}else
 				if(mode==1 && choosed>-1) {
-					ak.setVertex(choosed, touchpoint.x, touchpoint.y);
-					borders.get(choosed).setPosition(new Vector2(touchpoint.x, touchpoint.y));
+					int o = 0;
+					for(int i=choosed-5; i<choosed+5; i++) {
+						if(i<choosed) {
+							ak.setVertex(i, (float) (ak.getVertex(choosed-5).x + (touchpoint.x-ak.getVertex(choosed-5).x) * (o / 5.0)), (float) (ak.getVertex(choosed-5).y + (touchpoint.y-ak.getVertex(choosed-5).y) * (o / 5.0)));
+							//Gdx.app.log("a0", Integer.toString(i)+ " "+ak.getVertex(i).toString());
+						}else
+						if(i==choosed) {
+							ak.setVertex(choosed, touchpoint.x, touchpoint.y);
+							//Gdx.app.log("a0", Integer.toString(i)+ " "+ak.getVertex(i).toString());
+						}else
+						if(i>choosed) {
+							ak.setVertex(i, (float) (touchpoint.x + (ak.getVertex(choosed+5).x-touchpoint.x) * ((o-5) / 5.0)), (float) (touchpoint.y + (ak.getVertex(choosed+5).y-touchpoint.y) * ((o-5) / 5.0)));
+							//Gdx.app.log("a0", Integer.toString(i)+ " "+ak.getVertex(i).toString());
+						}
+						borders.get(i).setPosition(ak.getVertex(i));
+						o++;
+					}
 				}
 			}
 		}		
@@ -259,32 +274,32 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 			choosed = -1;
 		}else
 		if(keycode==Input.Keys.MINUS) {
-			 cam.zoom += 0.02;
+			 cam.zoom += 0.06;
 		}else
 		if(keycode==Input.Keys.PLUS) {
-			cam.zoom -= 0.02;
+			cam.zoom -= 0.06;
 		}else
 		if(keycode==Input.Keys.LEFT) {
             if (cam.position.x > 0)
-                    cam.translate(-3, 0, 0);
+                    cam.translate(-8, 0, 0);
 	    }else
 	    if(keycode==Input.Keys.RIGHT) {
 	            if (cam.position.x < 1024)
-	                    cam.translate(3, 0, 0);
+	                    cam.translate(8, 0, 0);
 	    }else
 	    if(keycode==Input.Keys.DOWN) {
 	            if (cam.position.y > 0)
-	                    cam.translate(0, -3, 0);
+	                    cam.translate(0, -8, 0);
 	    }else
 	    if(keycode==Input.Keys.UP) { // up
 	            if (cam.position.y < 1024)
-	                    cam.translate(0, 3, 0);
+	                    cam.translate(0, 8, 0);
 	    }
 	    if(keycode==Input.Keys.Z) {
-	            cam.rotate(-2, 0, 0, 1);
+	            cam.rotate(-6, 0, 0, 1);
 	    }
 	    if(keycode==Input.Keys.X) {
-	            cam.rotate(2, 0, 0, 1);
+	            cam.rotate(6, 0, 0, 1);
 	    }
 			
 		return false;
