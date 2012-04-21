@@ -2,8 +2,6 @@ package com.celoron.engine.core;
 
 import java.io.File;
 
-//import javax.script.ScriptEngine;
-//import javax.script.ScriptEngineManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -19,9 +17,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.celoron.engine.gui.GuiButton;
 import com.celoron.engine.gui.GuiManager;
+import com.celoron.engine.physic.PhysicListener;
 
 public abstract class Game extends InputAdapter implements ApplicationListener {
 	public OrthographicCamera camera;
@@ -30,6 +33,16 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	/* to calculate fdt: frame delta time */
 	public float deltaTime;
 	public float lastFrameTime;
+	
+	/* you can slow donw your game by setting gameSpeed to another float
+	 * this will effect physic engine and particle engine 
+	 * you can do this in-game realtime
+	 * 
+	 * exmaple: 
+	 * game.gameSpeed=0.5f; 
+	 * will slow down game to %50 
+	 */
+	public float gameSpeed=1.0f;
 
 	/* Managers */
 	public SceneManager scene; /* scene manager to manage entitys */
@@ -44,9 +57,6 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	public World world;
 	
 	public BitmapFont font;
-	
-	/* scripting */
-    //ScriptEngine script;
 
 	public boolean needsGL20() {
 		return false;
@@ -69,17 +79,50 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 
 		/* create physic world */
 		world = new World(new Vector2(0, -10), true);
+		ContactListener listener= new ContactListener() {
+			
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+				
+			}
+			
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+
+			}
+			
+			@Override
+			public void endContact(Contact contact) {
+				
+			}
+			
+			@Override
+			public void beginContact(Contact contact){
+				/*
+				 * this function sending information to contacted entitys
+				 * */
+				Object data1 =contact.getFixtureA().getUserData();
+				Object data2 =contact.getFixtureB().getUserData();
+				if(data1 instanceof Entity && data2 instanceof Entity){
+					Entity e1= (Entity) data1;
+					Entity e2= (Entity) data2;
+					PhysicListener listener1= (PhysicListener) e1.getComponent(PhysicListener.class);
+					PhysicListener listener2= (PhysicListener) e2.getComponent(PhysicListener.class);
+
+					if(listener1!=null)
+						listener1.onContact(e2, contact);
+					if(listener2!=null)
+						listener2.onContact(e1, contact);
+				}
+			}
+		};
+		world.setContactListener(listener);
 
 		lastFrameTime = System.nanoTime();
 		
 		/* load default font */
 		font = new BitmapFont(Gdx.files.internal("data/font/tahoma.fnt"), Gdx.files.internal("data/font/tahoma.png"), false);
 		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-
-		/*ScriptEngineManager manager = new ScriptEngineManager();
-	    script = manager.getEngineByName("JavaScript");
-	    script.put("game", this);*/
 		
 		/* this actually call game logic creating, not game engine */
 		onCreate();
@@ -93,11 +136,6 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
-			
-			NodeList scripts = doc.getElementsByTagName("script");
-			for (int i = 0; i < scripts.getLength(); i++){
-				//script.eval(scripts.item(i).getChildNodes().item(0).getNodeValue());
-			}
 
 			NodeList buttons = doc.getElementsByTagName("button");
 			for (int i = 0; i < buttons.getLength(); i++) {
@@ -145,6 +183,8 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		deltaTime = (System.nanoTime() - lastFrameTime) / 1000000000.0f;
 		lastFrameTime = System.nanoTime();
 		
+		deltaTime*=gameSpeed;
+		
 		/*
 		 * 1.update physic 
 		 * 2.update all entity, and its components
@@ -172,6 +212,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		
 		gui.renderAll();
 		onRender();
+		
 		
 		batch.end();
 	}

@@ -35,6 +35,7 @@ public class Sapan extends Component implements InputProcessor {
 		e.addComponent(new TextureRender(game.asset.getTexture("data/box.jpg")));
 		e.addComponent(new PhysicExtra(new Vector2(256, 256).mul(0.15f), BodyType.DynamicBody));
 		e.addComponent(new GiveSpeed(speed));
+		e.addComponent(new Box());
 		
 		e.setName("Throwed object");
 		

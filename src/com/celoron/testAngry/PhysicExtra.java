@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
-import com.celoron.engine.basic.PhysicComp;
+import com.celoron.engine.physic.PhysicComp;
 
 public class PhysicExtra extends PhysicComp implements InputProcessor {
 	
@@ -21,7 +21,6 @@ public class PhysicExtra extends PhysicComp implements InputProcessor {
 	/* radius is meter!! if you want to send pixel then use ( meter=pixel/BOX2D_SCALE ) */
 	public void explode(float radius){
 		Vector2 pos=body.getPosition();
-		
 		game.world.QueryAABB(
 				new QueryCallback(){
 

@@ -3,17 +3,17 @@ package com.celoron.testAngry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.celoron.engine.basic.PhysicComp;
 import com.celoron.engine.basic.RectRender;
 import com.celoron.engine.basic.TextRender;
 import com.celoron.engine.basic.TextureRender;
 import com.celoron.engine.core.Entity;
 import com.celoron.engine.core.Game;
+import com.celoron.engine.physic.PhysicComp;
 
 public class Angry extends Game {
 	Entity sapan;
@@ -40,36 +40,14 @@ public class Angry extends Game {
 		fps.setPosition(new Vector2(-Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2));
 		scene.addEntity(fps);
 		
-		ContactListener listener= new ContactListener() {
-			
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-				
-			}
-			
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-				
-			}
-			
-			@Override
-			public void endContact(Contact contact) {
-				
-			}
-			
-			@Override
-			public void beginContact(Contact contact) {				
-				Object data =contact.getFixtureA().getUserData();
-				if(data instanceof Entity && ((Entity)data).getName()!=null){
-					//Gdx.app.log("contact A:", ""+((Entity)data).getName());
-				}
-				data =contact.getFixtureA().getUserData();
-				if(data instanceof Entity && ((Entity)data).getName()!=null){
-					//Gdx.app.log("contact B:", ""+((Entity)data).getName());
-				}
-			}
-		};
-		world.setContactListener(listener);
+		Entity star= new Entity(this);
+		star.addComponent(new TextureRender(asset.getTexture("data/star.png")));
+		star.addComponent(new PhysicExtra(new Vector2(64,64), BodyType.DynamicBody));
+		star.addComponent(new Star());
+		
+		star.setName("star");
+		scene.addEntity(star);
+
 	}
 
 	@Override

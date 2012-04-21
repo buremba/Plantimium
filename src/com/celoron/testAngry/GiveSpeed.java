@@ -2,8 +2,8 @@ package com.celoron.testAngry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.celoron.engine.basic.PhysicComp;
 import com.celoron.engine.core.Component;
+import com.celoron.engine.physic.PhysicComp;
 
 /* give linear speed to entitys physics component after create */
 public class GiveSpeed extends Component {
