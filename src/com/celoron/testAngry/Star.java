@@ -20,12 +20,7 @@ public class Star extends Component implements PhysicListener{
 
 	@Override
 	public void remove() {
-		Entity parTest= new Entity(game);
-		ParticleRenderComp pe= new ParticleRenderComp("data/star.par", "data");
-		parTest.addComponent(pe);
-		pe.getParticle().setPosition(owner.getPosition().x, owner.getPosition().y);
 		
-		game.scene.addEntity(parTest);
 	}
 
 	@Override
@@ -36,6 +31,13 @@ public class Star extends Component implements PhysicListener{
 			/* then explode  */
 			PhysicExtra physic= (PhysicExtra) owner.getComponent(PhysicExtra.class);
 			if(physic != null) physic.explode(10);
+			
+			Entity parTest= new Entity(game);
+			ParticleRenderComp pe= new ParticleRenderComp("data/star.par", "data");
+			parTest.addComponent(pe);
+			pe.getParticle().setPosition(owner.getPosition().x, owner.getPosition().y);
+			
+			game.scene.addEntity(parTest);
 		}
 		
 	}
