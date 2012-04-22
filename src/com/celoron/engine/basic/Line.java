@@ -36,6 +36,8 @@ public class Line extends RenderComponent {
 	    Gdx.graphics.getGL10().glEnable(GL10.GL_TEXTURE_2D);
 	    
 		game.batch.enableBlending();
+		
+		Gdx.gl10.glLineWidth(1);
 	}
 	
 	public void setDim(Vector2 dim){

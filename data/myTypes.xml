@@ -1,0 +1,12 @@
+<types>
+
+<type name="Star" y="200">
+    <component name="TextureRender" path="data/star.png"/>
+    <component name="PhysicComp" dimX="64" dimY="64" type="Dynamic"/>
+</type>
+
+<type name="Plane" x="-300" y="-200">
+    <component name="PhysicComp" dimX="600" dimY="1" type="Static"/>
+</type>
+
+</types>

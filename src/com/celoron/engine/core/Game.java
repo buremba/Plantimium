@@ -34,7 +34,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 	public float deltaTime;
 	public float lastFrameTime;
 	
-	/* you can slow donw your game by setting gameSpeed to another float
+	/* you can slow down your game by setting gameSpeed to another float
 	 * this will effect physic engine and particle engine 
 	 * you can do this in-game realtime
 	 * 
@@ -68,7 +68,7 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 		batch = new SpriteBatch();
 
 		scene = new SceneManager();
-		asset= new AssetManager();
+		asset= new AssetManager(this);
 		input= new InputManager();
 		gui= new GuiManager(this);
 		
