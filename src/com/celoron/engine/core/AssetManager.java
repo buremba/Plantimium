@@ -92,18 +92,6 @@ public class AssetManager {
 		Entity entity=new Entity(game);
 		try {
 			Element type = types.get(name);
-			
-			float x=0;
-			float y=0;
-			String xs= type.getAttribute("x");
-			if(xs!=""){
-				x=Float.parseFloat(xs);
-			}
-			String ys= type.getAttribute("y");
-			if(ys!=""){
-				y=Float.parseFloat(ys);
-			}
-			entity.getPosition().set(x, y);
 
 			NodeList components = type.getElementsByTagName("component");
 			for (int i = 0; i < components.getLength(); i++) {

@@ -169,6 +169,72 @@ public abstract class Game extends InputAdapter implements ApplicationListener {
 				gui.addGuiObject(b);
 			}
 			
+			NodeList entitys = doc.getElementsByTagName("entity");
+			for (int i = 0; i < entitys.getLength(); i++) {
+				Element eElement = (Element) entitys.item(i);
+				
+				Gdx.app.log("Entity", "name:"+eElement.getAttribute("name")+" type:"+eElement.getAttribute("type"));
+				
+				Entity entity;
+				
+				/* type */
+				String type= eElement.getAttribute("type");
+				if(type==""){
+					entity= new Entity(this);
+				}
+				else{
+					entity = asset.createEntity(type);
+				}
+				
+				/* name */
+				String name= eElement.getAttribute("name");
+				if(name!="")
+					entity.setName(name);
+				
+				/* pos x-y */
+				float x=0;
+				float y=0;
+				String sx= eElement.getAttribute("x");
+				if(sx!="")x=Float.parseFloat(sx);
+				String sy= eElement.getAttribute("y");
+				if(sy!="")y=Float.parseFloat(sy);
+				
+				entity.getPosition().set(x, y);
+				
+				/* scale */
+				float scale=1.0f;
+				String sscale= eElement.getAttribute("scale");
+				if(sscale!="")scale=Float.parseFloat(sscale);
+				
+				entity.setScale(scale);
+				
+				/* rotation */
+				float rotation=0.0f;
+				String srotation= eElement.getAttribute("rot");
+				if(srotation!="")rotation=Float.parseFloat(srotation)/2;
+				
+				entity.setRotation(rotation);
+				
+				Gdx.app.log("roration", ""+entity.getRotation());
+				
+				
+				/* adding special component */
+				NodeList components = eElement.getElementsByTagName("component");
+				for (int j = 0; j < components.getLength(); j++) {
+					Element component = (Element) components.item(j);
+					Component c=asset.loadComponent(component);
+					if(c==null){
+						Gdx.app.log("Component loader", "asset manager cannot load component");
+					}
+					else{
+						entity.addComponent(c);
+					}
+				}
+				
+				scene.addEntity(entity);
+				
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

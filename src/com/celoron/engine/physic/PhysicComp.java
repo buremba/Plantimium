@@ -29,15 +29,12 @@ public class PhysicComp extends Component {
 	}
 	
 	public static Component loadFromXml(Game game, Element data){
-		BodyType type = null;
+		BodyType type = BodyType.DynamicBody;
 		
 		float dimX= Float.parseFloat(data.getAttribute("dimX"));
 		float dimY= Float.parseFloat(data.getAttribute("dimY"));
 		String stype=data.getAttribute("type");
-		if(stype.equals("Dynamic")){
-			type= BodyType.DynamicBody;
-		}
-		else if(stype.equals("Static")){
+		if(stype.equals("Static")){
 			type= BodyType.StaticBody;
 		}
 		
