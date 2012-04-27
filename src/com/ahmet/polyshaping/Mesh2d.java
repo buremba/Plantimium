@@ -92,7 +92,7 @@ public class Mesh2d {
 		Gdx.gl10.glTranslatef(pos.x, pos.y, 0);
 		Gdx.gl10.glRotatef(angle, 0, 0, 1);
 		mesh.render(renderMode);
-		Gdx.gl10.glPushMatrix();
+		Gdx.gl10.glPopMatrix();
 		s.end();
 		Gdx.gl10.glPointSize(1);
 		Gdx.gl10.glLineWidth(glLineWidth);
@@ -115,8 +115,7 @@ public class Mesh2d {
 			vertices[i * 6] = t1.x;
 			vertices[i * 6 + 1] = t1.y;
 			vertices[i * 6 + 2] = 0;
-			vertices[i * 6 + 3] = Color.toFloatBits(color.x, color.y, color.z,
-					255);
+			vertices[i * 6 + 3] = Color.toFloatBits(color.x, color.y, color.z,255);
 			vertices[i * 6 + 4] = 1;
 			vertices[i * 6 + 5] = 1;
 			indices[i] = (short) i;
@@ -131,32 +130,24 @@ public class Mesh2d {
 		for (int i = 0; i < polygonVertexList.length; i++) {
 			vertexlist2[i] = polygonVertexList[i];
 		}
-		vertexlist2[polygonVertexList.length] = new Vector2(x - pos.x, y
-				- pos.y);
+		vertexlist2[polygonVertexList.length] = new Vector2(x - pos.x, y - pos.y);
 		setVertices(vertexlist2);
 	}
-
-	public void getAdded(float x, float y, int order) {
-		ArrayList<Vector2> temp = new ArrayList<Vector2>();
-		for (int i = 0; i < polygonVertexList.length; i++) {
-			if (order == i) {
-				temp.add(new Vector2(x - pos.x, y - pos.y));
-			} else if (order < i) {
-				temp.add(polygonVertexList[i]);
-			} else {
-				temp.add(polygonVertexList[i]);
-			}
-
-		}
-		setVertices(temp.toArray(new Vector2[0]));
-	}
-
 	public void getAdded(float x, float y) {
 		ArrayList<Vector2> temp = new ArrayList<Vector2>();
 		for (int i = 0; i < polygonVertexList.length; i++) {
 			temp.add(polygonVertexList[i]);
 		}
 		temp.add(getClosestVertexIndex(x, y) + 1, new Vector2(x, y));
+		setVertices(temp.toArray(new Vector2[0]));
+	}
+
+	public void getAdded(float x, float y,int order) {
+		ArrayList<Vector2> temp = new ArrayList<Vector2>();
+		for (int i = 0; i < polygonVertexList.length; i++) {
+			temp.add(polygonVertexList[i]);
+		}
+		temp.add(order + 1, new Vector2(x, y));
 		setVertices(temp.toArray(new Vector2[0]));
 	}
 

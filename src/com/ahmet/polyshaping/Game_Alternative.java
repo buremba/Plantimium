@@ -30,8 +30,8 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 	boolean touchDragged;
 	boolean vertexLock=false;
 	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY = 3;
-	final private int MAX_SMOOTH_SENSIVITY = 5;
+	final private int MIN_SMOOTH_SENSIVITY = 20;
+	final private int MAX_SMOOTH_SENSIVITY = 25;
 	ArrayList<Ellipse> more = null;
 	private int active_more = -1;
 	private OrthographicCamera cam;
@@ -178,7 +178,7 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
 		Vector3 touchpointv3 =new Vector3(x,y,0); //where x and y are tap inputs
 		cam.unproject(touchpointv3);
 		touchpoint.x = touchpointv3.x;
-		touchpoint.y	= touchpointv3.y;
+		touchpoint.y = touchpointv3.y;
 		
 		if(mode==2) {
 			fillallcircle(false);
@@ -200,7 +200,8 @@ public class Game_Alternative extends InputAdapter implements ApplicationListene
     	    	errline.setPos2(new Vector2(closest_point.x,closest_point.y));
     	    	errline.setColor(new Vector3(0, 100,0));
     	    }
-		}else
+		}
+		else
 		if(mode==3) {
 				fillallcircle(false);
 				e1.setPosition(touchpoint);

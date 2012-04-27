@@ -34,6 +34,9 @@ public class Geometry {
 		return new Vector2(pointx, pointy);
 	}
 
+	/*
+	 * Çizgi , Nokta diklik kontrolü 
+	 */
 	public static boolean is_orthogonal(Vector2 p1, Vector2 p2, Vector2 point) {
 		double xDelta = p2.x - p1.x;
 		double yDelta = p2.y - p1.y;
@@ -91,8 +94,7 @@ public class Geometry {
 
 	}
 
-	public static TreeMap<Integer, Float> get_Sorted_Closest_Vertex(
-			Vector2 vertex[], float x, float y) {
+	public static TreeMap<Integer, Float> get_Sorted_Closest_Vertex(Vector2 vertex[], float x, float y) {
 		HashMap<Integer, Float> map = new HashMap<Integer, Float>();
 		for (int i = 0; i < vertex.length; i++) {
 			map.put(i, (float) Math.hypot(vertex[i].x - x, vertex[i].y - y));
