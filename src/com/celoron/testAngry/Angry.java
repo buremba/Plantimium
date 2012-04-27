@@ -4,10 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.celoron.engine.basic.RectRender;
 import com.celoron.engine.basic.TextRender;
 import com.celoron.engine.basic.TextureRender;
@@ -47,7 +43,6 @@ public class Angry extends Game {
 		
 		star.setName("star");
 		scene.addEntity(star);
-
 	}
 
 	@Override

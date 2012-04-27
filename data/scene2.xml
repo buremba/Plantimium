@@ -1,0 +1,11 @@
+<scene>
+    <entity name="unnamed star" type="Star" x="50" y="0"/>
+    <entity name="i can give name" type="Star" x="50" y="100"/>
+    
+    <entity type="Box" x="-50" y="100" scale="0.25"/>
+    <entity type="Box" x="-50" y="200" scale="0.25" rot="45"/>
+    
+    <entity name="BottomPlane" x="0" y="-200">
+        <component name="PhysicComp" dimX="600" dimY="1" type="Static"/>
+    </entity>
+</scene>

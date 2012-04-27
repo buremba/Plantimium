@@ -100,12 +100,17 @@ public class Entity {
 	public void update() {
 		/* removing components */
 		for (Component component : componentsToRemove) {
+			if(component instanceof InputProcessor ){
+				game.input.removeListener(component);
+			}
 			components.remove(component);
 		}
 		componentsToRemove.clear();
 		
 		/* adding components */
 		for (Component component : componentsToAdd) {
+			if(!component.canStart(this)) continue;
+			
 			components.add(component);
 			
 			/* if component need input, well then add it to input listeners list */
@@ -148,5 +153,9 @@ public class Entity {
 
 	public void setName(String name) {
 		this.name=name;
+	}
+
+	public RenderComponent getRenderComponent() {
+		return renderComponent;
 	}
 }

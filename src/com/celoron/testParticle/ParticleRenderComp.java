@@ -29,14 +29,19 @@ public class ParticleRenderComp extends RenderComponent{
 	
 	@Override
 	public void render() {
-		if(removeAfter && pe.isComplete())
-			game.scene.removeEntity(owner);
+		pe.setPosition(owner.getPosition().x, owner.getPosition().y);
 		pe.draw(game.batch, game.deltaTime);
+		
+		if(removeAfter && pe.isComplete()){
+			pe.dispose();
+			game.scene.removeEntity(owner);
+			return;
+		}
 	}
 
 	@Override
 	public void remove() {
-
+		
 	}
 
 	@Override

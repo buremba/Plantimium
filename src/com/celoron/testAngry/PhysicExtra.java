@@ -1,10 +1,14 @@
 package com.celoron.testAngry;
 
+import org.w3c.dom.Element;
+
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
+import com.celoron.engine.core.Component;
+import com.celoron.engine.core.Game;
 import com.celoron.engine.physic.PhysicComp;
 
 public class PhysicExtra extends PhysicComp implements InputProcessor {
@@ -12,6 +16,19 @@ public class PhysicExtra extends PhysicComp implements InputProcessor {
 	private boolean dragging=false;
 	public PhysicExtra(Vector2 dim, BodyType btype) {
 		super(dim, btype);
+	}
+	
+	public static Component loadFromXml(Game game, Element data){
+		BodyType type = BodyType.DynamicBody;
+		
+		float dimX= Float.parseFloat(data.getAttribute("dimX"));
+		float dimY= Float.parseFloat(data.getAttribute("dimY"));
+		String stype=data.getAttribute("type");
+		if(stype.equals("Static")){
+			type= BodyType.StaticBody;
+		}
+		
+		return new PhysicExtra(new Vector2(dimX, dimY), type);
 	}
 	
 	private void dragToPosition(Vector2 pos){
