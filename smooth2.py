@@ -39,8 +39,14 @@ def run_demos(width, height, fps):
         pygame.display.set_caption('Polygon Smoothing')
         background = create_background(width, height)
 
-        pl = [(50,50),(200,50),(200,200)]
-        
+        pl = [(50,50),(200,50),(200,200),(50,200)]
+        p2=[]
+        for i in range(100):
+            cs=getControls(pl[1],pl[2],pl[0],pl[3])
+            bx=bezier(pl[1][0],cs[0][0],cs[1][0],pl[2][0],i/100.)
+            by=bezier(pl[1][1],cs[0][1],cs[1][1],pl[2][1],i/100.)
+            print((bx,by))
+            p2.append((bx,by))
         clock = pygame.time.Clock()
         while True:
                 for event in pygame.event.get():
@@ -53,27 +59,19 @@ def run_demos(width, height, fps):
                                 stage=2
                                 pl=getSmoother(pl,2)
                 screen.blit(background, (0, 0)) 
-                pygame.draw.polygon(screen, (0, 0, 255), pl)
+                pygame.draw.polygon(screen, (0, 0, 255), p2)
                 pygame.display.flip()
                 clock.tick(fps)
-def getSmoother(polygon,Iteration):
-        pl=polygon
-        for i in range(Iteration):
-            pl2=[]
-            cursor=0
-            for i in range(len(pl)):
-                i1=overalIndex(pl,i);
-                i2=overalIndex(pl,i+1);
-                i0=overalIndex(pl,i-1);
-                i3=overalIndex(pl,i+2);
-                print i1,i2,i0,i3
-                cs=getControls(pl[i1],pl[i2],pl[i0],pl[i3])
-                pl2.append(pl[overalIndex(pl,i)])
-                pl2.append(cs[0])
-                pl2.append(cs[1])
-                pl2.append(pl[overalIndex(pl,i+1)]) 
-            pl=pl2
-        return pl
+                
+def bezier(A,B,C,D,t):
+        s = 1 - t
+        AB = A*s + B*t
+        BC = B*s + C*t
+        CD = C*s + D*t
+        ABC = BC*s + CD*t
+        BCD = BC*s + CD*t
+        return ABC*s + BCD*t
+
 def getControls(p1,p2,prep1,postp2):
         x1=p1[0]
         y1=p1[1]
@@ -85,7 +83,7 @@ def getControls(p1,p2,prep1,postp2):
         
         x3=postp2[0]
         y3=postp2[1]
-        smooth_value=0.250
+        smooth_value=0.8
         xc1 = (x0 + x1) / 2.0;
         yc1 = (y0 + y1) / 2.0;
         xc2 = (x1 + x2) / 2.0;
