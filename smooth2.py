@@ -41,12 +41,12 @@ def run_demos(width, height, fps):
 
         pl = [(50,50),(200,50),(200,200),(50,200)]
         p2=[]
-        for i in range(100):
-            cs=getControls(pl[1],pl[2],pl[0],pl[3])
-            bx=bezier(pl[1][0],cs[0][0],cs[1][0],pl[2][0],i/100.)
-            by=bezier(pl[1][1],cs[0][1],cs[1][1],pl[2][1],i/100.)
-            print((bx,by))
-            p2.append((bx,by))
+        for k in range(len(pl)):
+            for i in range(100):
+                cs=getControls(pl[overalIndex(pl,k)],pl[overalIndex(pl,k+1)],pl[overalIndex(pl,k-1)],pl[overalIndex(pl,k+2)])
+                bx=bezier(pl[overalIndex(pl,k)][0],cs[0][0],cs[1][0],pl[overalIndex(pl,k+1)][0],i/100.)
+                by=bezier(pl[overalIndex(pl,k)][1],cs[0][1],cs[1][1],pl[overalIndex(pl,k+1)][1],i/100.)
+                p2.append((bx,by))
         clock = pygame.time.Clock()
         while True:
                 for event in pygame.event.get():
@@ -83,7 +83,7 @@ def getControls(p1,p2,prep1,postp2):
         
         x3=postp2[0]
         y3=postp2[1]
-        smooth_value=0.8
+        smooth_value=0.4
         xc1 = (x0 + x1) / 2.0;
         yc1 = (y0 + y1) / 2.0;
         xc2 = (x1 + x2) / 2.0;
