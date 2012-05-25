@@ -3,6 +3,7 @@ package com.ahmet.polyshaping;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,11 +21,13 @@ import com.badlogic.gdx.math.Vector3;
 public class Mesh2d {
 	private Mesh mesh;
 	private Vector2[] polygonVertexList;
+	private Vector2[] smoothVertexList=null;
 	private Vector2[] triVertexList;
 	private int glLineWidth = 1;
 	private int renderMode = GL10.GL_LINE_SMOOTH;
 	public float PointSize = 1, LineWidth = 1;
 
+	private boolean renderSmooth=false;
 	private Vector3 color = new Vector3(255, 255, 255);
 	private Vector2 pos, dim = new Vector2(50, 50);
 	public float angle = 0;
@@ -51,10 +54,33 @@ public class Mesh2d {
 		setVertices(vertex);
 		setFill(fill);
 	}
-
+	public void smoothRender(boolean state)
+	{
+		renderSmooth=state;
+		if(renderSmooth==true)
+		{
+			Vector2[] vlist=this.getVertices();
+			List<Vector2> vertices=new ArrayList<Vector2>();
+			for(int i=0; i<vlist.length; i++)
+			{
+				vertices.add(vlist[i]);
+			}
+			List<Vector2> temp=Bezier.smoothPolygon(vertices);
+			vlist=new Vector2[temp.size()];
+			for(int i=0; i<temp.size(); i++)
+			{
+				vlist[i]=temp.get(i);
+			}
+			this.setVertices(vlist);
+		}
+		else
+		{
+			this.setVertices(polygonVertexList);
+		}
+	}
 	public void setVertices(Vector2[] vertexlist) {
 		polygonVertexList = vertexlist;
-		triVertexList = Tools.Triangulate(polygonVertexList);
+		//triVertexList = Tools.Triangulate(polygonVertexList);
 		setRenderMode(renderMode);
 	}
 

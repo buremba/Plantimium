@@ -19,8 +19,9 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 	boolean touchDown;
 	boolean touchDragged;
 	boolean inDragStarted;
+	boolean showSmooth=false;
 	Ellipse Indicator;
-	Mesh2d shape = null;
+	Mesh2d shape = null,smoothPol=null;
 	Vector2 touchpoint,dragStart=new Vector2();;
 	Game3 game;
 	ArrayList<Integer> lockedVertices=new ArrayList();
@@ -28,9 +29,9 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 	
 	
 	ArrayList<Ellipse> borders = new ArrayList<Ellipse>();
-	final private int CLICK_SENSIVITY = 25;
-	final private int MIN_SMOOTH_SENSIVITY = 20;
-	final private int MAX_SMOOTH_SENSIVITY = 25;
+	final private int CLICK_SENSIVITY = 50;
+	final private int MIN_SMOOTH_SENSIVITY = 40;
+	final private int MAX_SMOOTH_SENSIVITY = 50;
 	ShapeBuilder(Game3 g)
 	{
 		Gdx.input.setInputProcessor(this);	
@@ -45,6 +46,10 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 		{
 			shape.Draw(s);
 		}
+		if(smoothPol!=null)
+		{
+			
+		}
 		Indicator.Draw(s);
 		if(borders!=null) {
 			for(int i=0; i<borders.size(); i++) {
@@ -55,6 +60,7 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 	}
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+		
 		Vector3 touchpointv3 =new Vector3(x,y,0); //where x and y are tap inputs
 		game.getCamera().unproject(touchpointv3);
 		touchpoint.x = touchpointv3.x;
@@ -65,6 +71,7 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 		}
 		if(!allowEdit && shape!=null)
 		{
+			shape.smoothRender(false);
 			closeCapture();
 		}
 		dragStart.x = touchpoint.x;
@@ -161,11 +168,29 @@ public class ShapeBuilder extends Drawable implements InputProcessor {
 		allowEdit=false;
 		touchDown=false;
 		touchDragged=false;
+		shape.smoothRender(true);
 		return false;
 	}
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		if(keycode==62)
+		{
+			Vector2[] vlist=shape.getVertices();
+			List<Vector2> vertices=new ArrayList<Vector2>();
+			for(int i=0; i<vlist.length; i++)
+			{
+				vertices.add(vlist[i]);
+			}
+			List<Vector2> temp=Bezier.smoothPolygon(vertices);
+			vlist=new Vector2[temp.size()];
+			for(int i=0; i<temp.size(); i++)
+			{
+				vlist[i]=temp.get(i);
+			}
+			System.out.println("outtalove");
+			shape.setVertices(vlist);
+			System.out.println("finished");
+		}
 		return false;
 	}
 	@Override

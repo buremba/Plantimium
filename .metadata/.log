@@ -109,3 +109,12 @@ org.eclipse.core.internal.resources.ResourceException: The project description f
 
 !ENTRY org.eclipse.ui 4 4 2012-04-17 01:26:18.507
 !MESSAGE Invalid preference page path: XML Syntax
+!SESSION 2012-05-24 21:53:20.621 -----------------------------------------------
+eclipse.buildId=M20110909-1335
+java.version=1.6.0_25
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=tr_TR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.ui 4 4 2012-05-24 21:54:20.057
+!MESSAGE Invalid preference page path: XML Syntax
