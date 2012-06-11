@@ -1,6 +1,5 @@
 package com.ahmet.polyshaping;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Game3 extends InputAdapter implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;

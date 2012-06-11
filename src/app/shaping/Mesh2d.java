@@ -1,13 +1,8 @@
-package com.ahmet.polyshaping;
+package app.shaping;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import com.ahmet.b2d.Tools;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -21,7 +16,6 @@ import com.badlogic.gdx.math.Vector3;
 public class Mesh2d {
 	private Mesh mesh;
 	private Vector2[] polygonVertexList;
-	private Vector2[] smoothVertexList=null;
 	private Vector2[] triVertexList;
 	private int glLineWidth = 1;
 	private int renderMode = GL10.GL_LINE_SMOOTH;
@@ -29,75 +23,32 @@ public class Mesh2d {
 
 	private boolean renderSmooth=false;
 	private Vector3 color = new Vector3(255, 255, 255);
-	private Vector2 pos, dim = new Vector2(50, 50);
+	private Vector2 pos;
 	public float angle = 0;
-	int in=0;
-	Mesh2d() {
-	}
 
-	Mesh2d(Vector2 Pos, Vector3 Color) {
+	public Mesh2d(Vector2 Pos, Vector3 Color) {
 		pos = Pos;
 		color = Color;
 	}
 
-	Mesh2d(Vector2[] vertexlist, Vector2 Pos, Vector3 Color, boolean fill) {
+	public Mesh2d(Vector2[] vertexlist, Vector2 Pos, Vector3 Color, boolean fill) {
 		pos = Pos;
 		color = Color;
 		setVertices(vertexlist);
 		setFill(fill);
 	}
 
-	Mesh2d(Vector2 vertice, Vector2 Pos, Vector3 Color, boolean fill) {
+	public Mesh2d(Vector2 vertice, Vector2 Pos, Vector3 Color, boolean fill) {
 		pos = Pos;
 		color = Color;
 		Vector2[] vertex = { vertice };
 		setVertices(vertex);
 		setFill(fill);
 	}
-	public void smoothRender(boolean state)
-	{
-		renderSmooth=state;
-		if(renderSmooth==true)
-		{
-			reSmooth();
-			this.setVertices(smoothVertexList);
-		}
-		else
-		{
-			this.setVertices(polygonVertexList);
-		}
-	}
-	public void reSmooth()
-	{
-		Vector2[] vlist=polygonVertexList;
-		List<Vector2> vertices=new ArrayList<Vector2>();
-		for(int i=0; i<vlist.length; i++)
-		{
-			vertices.add(vlist[i]);
-		}
-		List<Vector2> temp=Bezier.smoothPolygon(vertices);
-		vlist=new Vector2[temp.size()];
-		for(int i=0; i<temp.size(); i++)
-		{
-			vlist[i]=temp.get(i);
-		}		
-		smoothVertexList=vlist;
-	}
 	public void setVertices(Vector2[] vertexlist) {
-		Vector2[] temp=polygonVertexList;
-		Vector2[] temptri=Tools.Triangulate(vertexlist);
-		if(temptri!=null)
-		{
-			triVertexList=temptri;
-			polygonVertexList = vertexlist;
-			setRenderMode(renderMode);
-		}
-		else
-		{
-			System.out.println("IGNORED EDIT #"+in);
-			in++;
-		}
-
+		polygonVertexList = vertexlist;
+		//triVertexList = Tools.Triangulate(polygonVertexList);
+		setRenderMode(renderMode);
 	}
 
 	protected void setColor(Vector3 col) {
@@ -133,7 +84,6 @@ public class Mesh2d {
 		Gdx.gl10.glLineWidth(LineWidth);
 		Gdx.gl10.glTranslatef(pos.x, pos.y, 0);
 		Gdx.gl10.glRotatef(angle, 0, 0, 1);
-		Gdx.gl10.glScalef(0.2f, 0.2f, 1);
 		mesh.render(renderMode);
 		Gdx.gl10.glPopMatrix();
 		s.end();
@@ -158,7 +108,7 @@ public class Mesh2d {
 			vertices[i * 6] = t1.x;
 			vertices[i * 6 + 1] = t1.y;
 			vertices[i * 6 + 2] = 0;
-			vertices[i * 6 + 3] = Color.toFloatBits(20, 100, 20,255);
+			vertices[i * 6 + 3] = Color.toFloatBits(color.x, color.y, color.z,255);
 			vertices[i * 6 + 4] = 1;
 			vertices[i * 6 + 5] = 1;
 			indices[i] = (short) i;

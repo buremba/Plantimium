@@ -30,8 +30,8 @@ public class Bezier {
         	Vector2 B=Polygon.get(overalIndex(Polygon,i));
         	Vector2 C=Polygon.get(overalIndex(Polygon,i+1));
         	Vector2 D=Polygon.get(overalIndex(Polygon,i+2));
-            Vector2[] cs=getControls(B,C,A,D,0.8f);
-            for(int k=0; k<100; k+=10)
+            Vector2[] cs=getControls(B,C,A,D,0.9f);
+            for(int k=0; k<100; k+=50)
             {
                 float bx=bezierStep(B.x,cs[0].x,cs[1].x,C.x,k/100.0f);
                 float by=bezierStep(B.y,cs[0].y,cs[1].y,C.y,k/100.0f);
